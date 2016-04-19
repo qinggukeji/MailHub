@@ -4,7 +4,7 @@
  * Here is laravel for MailHub facade
  *
  * @license MIT
- * @package Zizaco\Entrust
+ * @package MrVokia\MailHub
  */
 
 use Illuminate\Support\Facades\Facade;
