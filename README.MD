@@ -4,16 +4,16 @@
 Language: [Chinese](https://github.com/MrVokia/MailHub/edit/master/README_CN.MD)
 ---
 
-#### ** MailHub is an email package for Laravel. **
+#### MailHub is an email package for Laravel.
 
 *It integrates third-party email services with Laravel's SwiftMail, providing a unified protocol for email routines.
 A rule engine is employed to post emails to different domains by corresponding senders.*
 
-+ ** Provides elegant email interface instead of SwiftMail **
-+ ** Connects to third-party email services beyond SwiftMail **
-+ ** Currently implements email sending by SendCloud **
-+ ** Tags and queues planned in next versions **
-+ ** Discussions and PRs are welcome **
++ Provides elegant email interface instead of SwiftMail
++ Connects to third-party email services beyond SwiftMail
++ Currently implements email sending by SendCloud
++ Tags and queues planned in next versions
++ Discussions and PRs are welcome
 
 
 
