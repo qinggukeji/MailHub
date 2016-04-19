@@ -1,4 +1,7 @@
 #MailHub
+
+---
+Language: [Chinese](https://github.com/MrVokia/MailHub/edit/master/README_CN.MD)
 ---
 
 #### ** MailHub is an email package for Laravel. **
