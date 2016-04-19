@@ -1,5 +1,5 @@
 {
-    "name": "vokia/mailhub",
+    "name": "mrvokia/mailhub",
     "description": "mail integration for laravel",
     "keywords": ["mail","mailer","email", "mailhub", "hub"],
     "version": "1.0.0-RC1",
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MrVokia\\MailHub\\": "mailhub/src/"
+            "MrVokia\\MailHub\\": "src/MailHub/"
         }
     }
 }
