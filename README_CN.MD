@@ -1,4 +1,8 @@
 #MailHub
+
+[![Build Status](https://travis-ci.org/MrVokia/MailHub.svg?branch=master)](https://travis-ci.org/MrVokia/MailHub)
+[![Latest Stable Version](https://poser.pugx.org/mrvokia/mailhub/v/stable)](https://packagist.org/packages/mrvokia/mailhub) [![Total Downloads](https://poser.pugx.org/mrvokia/mailhub/downloads)](https://packagist.org/packages/mrvokia/mailhub) [![Latest Unstable Version](https://poser.pugx.org/mrvokia/mailhub/v/unstable)](https://packagist.org/packages/mrvokia/mailhub) [![License](https://poser.pugx.org/mrvokia/mailhub/license)](https://packagist.org/packages/mrvokia/mailhub)
+
 ---
 
 ####MailHub是一款用于Laravel的第三方邮件API集成接口。
