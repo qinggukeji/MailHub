@@ -7,9 +7,12 @@ php:
   - '7.0'
   - hhvm
 
-install:
+matrix:
+  fast_finish: true
+
+before_script:
+  - composer self-update
   - composer install
 
 script:
-
-after_script:
+  - vendor/bin/phpunit -verbose

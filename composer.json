@@ -13,6 +13,10 @@
     "require": {
         "php": ">=5.4.9"
     },
+    
+    "require-dev": {
+        "phpunit/phpunit": "~4.1"
+    },
     "autoload": {
         "psr-4": {
             "MrVokia\\MailHub\\": "src/MailHub/"
