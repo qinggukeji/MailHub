@@ -2,7 +2,7 @@
     "name": "mrvokia/mailhub",
     "description": "mail integration for laravel",
     "keywords": ["mail","mailer","email", "mailhub", "hub"],
-    "version": "1.0.0-RC1",
+    "version": "v1.0.1",
     "license": "MIT",
     "authors": [
         {
@@ -21,5 +21,6 @@
         "psr-4": {
             "MrVokia\\MailHub\\": "src/MailHub/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
