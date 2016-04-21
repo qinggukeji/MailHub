@@ -22,17 +22,20 @@ A rule engine is employed to post emails to different domains by corresponding s
 
 ##How to install:
 
-	// The introduction of dependent libraries
-	composer require MrVokid\MailHub
+	# The introduction of dependent libraries
+	composer require mrvokia/mailhub:"dev-master@dev" -vvv
 	
-	// Added service provider in the providers
+	# Added service provider in the providers
 	MrVokia\MailHub\MailHubServiceProvider::class
 	
-	// Add the aliases facade
+	# Add the aliases facade
 	'MailHub' => MrVokia\MailHub\MailHubFacade::class
 	
-	// Push Profile mailhub
-	php artisan publish
+	# Composer auto load
+	composer dump
+
+	# Push Profile mailhub
+	php artisan vendor:publish
 
 
 ##How to use:

@@ -1,7 +1,7 @@
-<?php namespace MrVokia\MailHub;
+<?php
+namespace MrVokia\MailHub;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Routing\Router;
 use ReflectionClass;
 
 class MailHubServiceProvider extends ServiceProvider
@@ -14,7 +14,6 @@ class MailHubServiceProvider extends ServiceProvider
      */
     protected $defer = false;
 
-
     /**
      * Bootstrap the application events.
      *
@@ -24,10 +23,9 @@ class MailHubServiceProvider extends ServiceProvider
     {
         // Publish config files
         $this->publishes([
-            __DIR__.'/../config/config.php' => config_path('mailhub.php'),
+            __DIR__ . '/../config/config.php' => config_path('mailhub.php'),
         ]);
     }
-
 
     /**
      * Register the service provider.
@@ -37,10 +35,7 @@ class MailHubServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerMailHub();
-
-        $this->mergeConfig();
     }
-
 
     /**
      * Register the application bindings.
@@ -51,27 +46,14 @@ class MailHubServiceProvider extends ServiceProvider
     {
         // Api mail module
         $module = [
-            'send' => new ReflectionClass('MrVokia\MailHub\MailHubSend')
+            'send' => new ReflectionClass('MrVokia\MailHub\MailHubSend'),
         ];
 
         $this->app->bind('mailhub', function ($app) {
             return new MailHub($module);
         });
-        
+
         $this->app->alias('mailhub', 'MrVokia\MailHub\MailHub');
-    }
-
-
-    /**
-     * Merges user's and entrust's configs.
-     *
-     * @return void
-     */
-    private function mergeConfig()
-    {
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/config.php', 'mailhub'
-        );
     }
 
 }

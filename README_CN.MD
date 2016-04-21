@@ -16,17 +16,20 @@
 
 ##使用流程:
 
-	// 引入依赖库
-	composer require MrVokid\MailHub
+	# 引入依赖库
+	composer require mrvokia/mailhub:"dev-master@dev" -vvv
 	
-	// 在providers添加服务提供者
+	# 在providers添加服务提供者
 	MrVokia\MailHub\MailHubServiceProvider::class
 	
-	// 在aliases添加门面
+	# 在aliases添加门面
 	'MailHub' => MrVokia\MailHub\MailHubFacade::class
 	
-	// 推送配置文件mailhub到config
-	php artisan publish
+	# 关联自动加载
+	composer dump
+
+	# 推送配置文件mailhub到config
+	php artisan vendor:publish
 	
 ##使用方法:
 
