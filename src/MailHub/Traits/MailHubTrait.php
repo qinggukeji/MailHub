@@ -83,13 +83,18 @@ trait MailHubTrait
      */
     private $xsmtpapi;
 
+    /**
+     * Forcibly gateway
+     * @var string
+     */
+    private $forcibly;
 
     /**
      * Construction of initialization method
      */
     public function __construct()
     {
-        
+
         $this->setGateways();
         $this->setApiUser();
         $this->setFrom();
@@ -103,8 +108,7 @@ trait MailHubTrait
      */
     public function setGateways($gateway = '')
     {
-        if (empty($gateway)) 
-        {
+        if (empty($gateway)) {
             $gateway = config('mailhub.default');
         }
         $this->gateway = $gateway;
@@ -125,6 +129,9 @@ trait MailHubTrait
      */
     public function getAllGateways()
     {
+        if (!empty($this->forcibly)) {
+            return [$this->forcibly];
+        }
         return array_keys(config('mailhub.gateways'));
     }
 
@@ -135,14 +142,12 @@ trait MailHubTrait
     public function getConfig()
     {
         $config = config('mailhub.gateways.' . $this->gateway);
-        
-        if ( empty($config) )
-        {
+
+        if (empty($config)) {
             return $this->_throwException('gateways');
         }
         return $config;
     }
-
 
     /**
      * Get option from config
@@ -151,14 +156,12 @@ trait MailHubTrait
     public function getOption()
     {
         $options = array_get($this->getConfig(), 'options');
-        
-        if ( empty($options) )
-        {
+
+        if (empty($options)) {
             return $this->_throwException('options');
         }
         return $options;
     }
-
 
     /**
      * Get api url from config
@@ -167,14 +170,12 @@ trait MailHubTrait
     public function getApiUri()
     {
         $apiUri = array_get($this->getConfig(), 'api_uri');
-        
-        if ( empty($apiUri) )
-        {
+
+        if (empty($apiUri)) {
             return $this->_throwException('api_uri');
         }
         return $apiUri;
     }
-
 
     /**
      * Set api user to config[default:trigger]
@@ -182,13 +183,11 @@ trait MailHubTrait
      */
     public function setApiUser($type = '')
     {
-        if ( empty($type) )
-        {
+        if (empty($type)) {
             $type = 'trigger';
         }
         $this->type = $type;
     }
-
 
     /**
      * Get api user from config
@@ -197,9 +196,8 @@ trait MailHubTrait
     public function getApiUser()
     {
         $apiUser = array_get($this->getOption(), 'api_user.' . $this->type);
-        
-        if ( empty($apiUser) )
-        {
+
+        if (empty($apiUser)) {
             return $this->_throwException('api_user.' . $this->type);
         }
         return $apiUser;
@@ -213,8 +211,7 @@ trait MailHubTrait
     {
         $apiKey = array_get($this->getOption(), 'api_key');
 
-        if ( empty($apiKey) )
-        {
+        if (empty($apiKey)) {
             return $this->_throwException('api_key');
         }
         return $apiKey;
@@ -228,8 +225,7 @@ trait MailHubTrait
     {
         $method = array_get($this->getOption(), 'method');
 
-        if ( empty($method) )
-        {
+        if (empty($method)) {
             return $this->_throwException('method');
         }
         return $method;
@@ -246,7 +242,7 @@ trait MailHubTrait
 
     /**
      * Get sender from config
-     * @return string 
+     * @return string
      */
     public function getFrom()
     {
@@ -258,8 +254,7 @@ trait MailHubTrait
      */
     public function setFrom($from = '')
     {
-        if ( empty($from) )
-        {
+        if (empty($from)) {
             $from = config('mailhub.sender_mail');
         }
         $this->from = $from;
@@ -274,26 +269,24 @@ trait MailHubTrait
     }
 
     /**
-     * Sender's name from the default setting 
+     * Sender's name from the default setting
      * to obtain from a configuration file
      */
     public function setFromName($fromName = '')
     {
-        if ( empty($fromName) )
-        {
+        if (empty($fromName)) {
             $fromName = config('mailhub.sender_name');
         }
         $this->fromName = $fromName;
     }
 
     /**
-     * Configure mail receipt side, 
+     * Configure mail receipt side,
      * the default configuration is available from
      */
     public function setReplyTo($mail = '')
     {
-        if ( empty($mail) )
-        {
+        if (empty($mail)) {
             $mail = config('mailhub.reply_mail');
         }
         $this->replyTo = $mail;
@@ -353,6 +346,15 @@ trait MailHubTrait
     public function getXsmtpapi()
     {
         return $this->xsmtpapi;
+    }
+
+    /**
+     * Setting the mail forcibly gateway
+     * @param string $gateway gateway name
+     */
+    public function setForcibly($gateway)
+    {
+        $this->forcibly = $gateway;
     }
 
     /**

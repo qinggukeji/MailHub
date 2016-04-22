@@ -193,13 +193,19 @@ trait MailHubSendTrait
 
         $fifterMail = [];
 
+        if (!is_array($mails)) {
+            $mails = [$mails];
+        }
+
+        // Check fifter
         if (empty($fifter)) {
             $fifterMail[$this->getGateways()] = $mails;
             return $this->setTo($fifterMail);
         }
 
-        if (!is_array($mails)) {
-            $mails = [$mails];
+        if (!empty($this->forcibly)) {
+            $fifterMail[$this->forcibly] = $mails;
+            return $this->setTo($fifterMail);
         }
 
         foreach ($mails as $k => $mail) {

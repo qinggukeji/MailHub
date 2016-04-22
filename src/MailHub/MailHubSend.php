@@ -1,4 +1,5 @@
-<?php namespace MrVokia\MailHub;
+<?php
+namespace MrVokia\MailHub;
 
 /**
  * This class is the main send entry point of MailHub.
@@ -7,9 +8,9 @@
  * @package MrVokia\MailHub
  */
 
+use Mail;
 use MrVokia\MailHub\Contracts\MailHubSendInterface;
 use MrVokia\MailHub\Traits\MailHubSendTrait;
-use Mail;
 
 class MailHubSend implements MailHubSendInterface
 {
@@ -28,25 +29,22 @@ class MailHubSend implements MailHubSendInterface
         $classSuffix = 'send';
 
         // template send
-        $xsmtpapi = $this->getXsmtpapi();
+        $xsmtpapi           = $this->getXsmtpapi();
         $templateInvokeName = $this->getTemplateInvokeName();
-        if ( !empty($xsmtpapi) && !empty($templateInvokeName) )
-        {
+        if (!empty($xsmtpapi) && !empty($templateInvokeName)) {
             $classSuffix = 'send_template';
         }
 
         // check method is exist
-        if( !in_array($classSuffix, array_keys($methods)) )
-        {
+        if (!in_array($classSuffix, array_keys($methods))) {
             $this->_throwException($classSuffix);
         }
 
         // get class name && verify method defined
-        $className = camel_case('start_'.$classSuffix);
+        $className = camel_case('start_' . $classSuffix);
 
-        if ( method_exists($this, $className) )
-        {
-            return $this->$className( $this->getApiUri() . $methods[$classSuffix] );
+        if (method_exists($this, $className)) {
+            return $this->$className($this->getApiUri() . $methods[$classSuffix]);
         }
         return $this->_throwException($className);
     }
@@ -60,34 +58,30 @@ class MailHubSend implements MailHubSendInterface
     {
         // Def send params
         $params = [
-            'apiUser' => $this->getApiUser(),
-            'apiKey' => $this->getApiKey(),
-            'from' => $this->getFrom(),
+            'apiUser'  => $this->getApiUser(),
+            'apiKey'   => $this->getApiKey(),
+            'from'     => $this->getFrom(),
             'fromName' => $this->getFromName(),
-            'to' => '',
-            'cc' => '',
-            'bcc' => '',
-            'replyTo' => $this->replyTo,
-            'subject' => $this->subject,
-            'html' => $this->html,
+            'to'       => '',
+            'cc'       => '',
+            'bcc'      => '',
+            'replyTo'  => $this->replyTo,
+            'subject'  => $this->subject,
+            'html'     => $this->html,
         ];
 
         // Set the gateway corresponding method
-        foreach ($this->to as $gateway => $mails) 
-        {
-            $params['to'] = isset($this->to[$gateway])?$this->to[$gateway]:null;
-            $params['cc'] = isset($this->cc[$gateway])?$this->cc[$gateway]:null;
-            $params['bcc'] = isset($this->bcc[$gateway])?$this->bcc[$gateway]:null;
+        foreach ($this->to as $gateway => $mails) {
+            $params['to']  = isset($this->to[$gateway]) ? $this->to[$gateway] : null;
+            $params['cc']  = isset($this->cc[$gateway]) ? $this->cc[$gateway] : null;
+            $params['bcc'] = isset($this->bcc[$gateway]) ? $this->bcc[$gateway] : null;
 
-            if ( 'swiftmail' == $gateway ) 
-            {
+            if ('swiftmail' == $gateway) {
                 $this->swiftMailSend($params);
-            } 
-            else 
-            {
-                $params['to'] = isset($params['to'])?implode(';', $params['to']):null;
-                $params['cc'] = isset($params['cc'])?implode(';', $params['cc']):null;
-                $params['bcc'] = isset($params['bcc'])?implode(';', $params['bcc']):null;
+            } else {
+                $params['to']  = isset($params['to']) ? implode(';', $params['to']) : null;
+                $params['cc']  = isset($params['cc']) ? implode(';', $params['cc']) : null;
+                $params['bcc'] = isset($params['bcc']) ? implode(';', $params['bcc']) : null;
                 $this->apiMailSend($uri, $gateway, $params);
             }
         }
@@ -103,42 +97,37 @@ class MailHubSend implements MailHubSendInterface
     {
         // Def send params
         $params = [
-            'apiUser' => $this->getApiUser(),
-            'apiKey' => $this->getApiKey(),
-            'from' => $this->getFrom(),
-            'fromName' => $this->getFromName(),
-            'to' => '',
-            'cc' => $this->cc,
-            'bcc' => $this->bcc,
-            'replyTo' => $this->replyTo,
-            'xsmtpapi' => '',
-            'subject' => $this->subject,
-            'templateInvokeName' => ''
+            'apiUser'            => $this->getApiUser(),
+            'apiKey'             => $this->getApiKey(),
+            'from'               => $this->getFrom(),
+            'fromName'           => $this->getFromName(),
+            'to'                 => '',
+            'cc'                 => $this->cc,
+            'bcc'                => $this->bcc,
+            'replyTo'            => $this->replyTo,
+            'xsmtpapi'           => '',
+            'subject'            => $this->subject,
+            'templateInvokeName' => '',
         ];
 
         // Set the gateway corresponding method
-        foreach ($this->to as $gateway => $mails) 
-        {
-            $params['to'] = isset($this->to[$gateway])?$this->to[$gateway]:null;
-            $params['cc'] = isset($this->cc[$gateway])?$this->cc[$gateway]:null;
-            $params['bcc'] = isset($this->bcc[$gateway])?$this->bcc[$gateway]:null;
-            $params['xsmtpapi'] = $this->xsmtpapi[$gateway];
+        foreach ($this->to as $gateway => $mails) {
+            $params['to']                 = isset($this->to[$gateway]) ? $this->to[$gateway] : null;
+            $params['cc']                 = isset($this->cc[$gateway]) ? $this->cc[$gateway] : null;
+            $params['bcc']                = isset($this->bcc[$gateway]) ? $this->bcc[$gateway] : null;
+            $params['xsmtpapi']           = $this->xsmtpapi[$gateway];
             $params['templateInvokeName'] = $this->templateInvokeName[$gateway];
 
-            if ( 'swiftmail' == $gateway ) 
-            {
+            if ('swiftmail' == $gateway) {
                 $this->swiftMailTemplateSend($params);
-            } 
-            else 
-            {
-                $params['to'] = isset($params['to'])?implode(';', $params['to']):null;
-                $params['cc'] = isset($params['cc'])?implode(';', $params['cc']):null;
-                $params['bcc'] = isset($params['bcc'])?implode(';', $params['bcc']):null;
+            } else {
+                $params['to']  = isset($params['to']) ? implode(';', $params['to']) : null;
+                $params['cc']  = isset($params['cc']) ? implode(';', $params['cc']) : null;
+                $params['bcc'] = isset($params['bcc']) ? implode(';', $params['bcc']) : null;
                 $this->apiMailTemplateSend($uri, $gateway, $params);
             }
         }
     }
-
 
     /**
      * Api mail send
@@ -151,13 +140,12 @@ class MailHubSend implements MailHubSendInterface
 
         //send
         $client = new \GuzzleHttp\Client();
-        $res = $client->request('post', $uri, [
-            'form_params' => $params
+        $res    = $client->request('post', $uri, [
+            'form_params' => $params,
         ]);
 
-        return (string)$res->getBody();
+        return (string) $res->getBody();
     }
-
 
     /**
      * Swift mail send
@@ -165,12 +153,10 @@ class MailHubSend implements MailHubSendInterface
      */
     private function swiftMailSend($params)
     {
-        Mail::raw($params['html'], function($message) use ($params)
-        {
+        Mail::raw($params['html'], function ($message) use ($params) {
             $message->to($params['to'])->subject($params['subject']);
         });
     }
-
 
     /**
      * Api mail template send
@@ -183,13 +169,12 @@ class MailHubSend implements MailHubSendInterface
 
         //send
         $client = new \GuzzleHttp\Client();
-        $res = $client->request('post', $uri, [
-            'form_params' => $params
+        $res    = $client->request('post', $uri, [
+            'form_params' => $params,
         ]);
 
-        return (string)$res->getBody();
+        return (string) $res->getBody();
     }
-
 
     /**
      * Api mail template send
@@ -197,8 +182,7 @@ class MailHubSend implements MailHubSendInterface
      */
     private function swiftMailTemplateSend($params)
     {
-        Mail::send($params['templateInvokeName'], $params['xsmtpapi'], function($message) use ($params)
-        {
+        Mail::send($params['templateInvokeName'], $params['xsmtpapi'], function ($message) use ($params) {
             $message->to($params['to'])->subject($params['subject']);
         });
     }

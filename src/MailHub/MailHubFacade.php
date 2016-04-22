@@ -1,4 +1,5 @@
-<?php namespace MrVokia\MailHub;
+<?php
+namespace MrVokia\MailHub;
 
 /**
  * Here is laravel for MailHub facade
