@@ -3,14 +3,12 @@ namespace MrVokia\MailHub\Traits;
 
 /**
  * Here is the mail send module features trait
- * 
+ *
  * @license MIT
  * @package MrVokia\MailHub
  */
 
-use GuzzleHttp\Client;
 use MrVokia\MailHub\Traits\MailHubTrait;
-use MrVokia\MailHub\Exception\MailHubException;
 
 trait MailHubSendTrait
 {
@@ -18,16 +16,14 @@ trait MailHubSendTrait
 
     /**
      * Set up mail sender
-     * @param string $mail 
+     * @param string $mail
      */
     public function from($mail = '')
     {
-        if ( !empty($mail) ) 
-        {
+        if (!empty($mail)) {
             $this->setFrom($mail);
         }
-        if ( empty($this->getFrom()) )
-        {
+        if (empty($this->getFrom())) {
             return $this->_throwException('gateways.' . $this->getGateways() . '.options.username');
         }
         return $this;
@@ -39,9 +35,8 @@ trait MailHubSendTrait
      */
     public function type($val = '')
     {
-        if( !empty($val) )
-        {
-            $this->setApiUser( trim($val) );
+        if (!empty($val)) {
+            $this->setApiUser(trim($val));
         }
         return $this;
     }
@@ -52,15 +47,11 @@ trait MailHubSendTrait
      */
     public function to($mails = '')
     {
-        if ( empty($mails) )
-        {
+        if (empty($mails)) {
             return false;
         }
 
-        if ( is_array($mails) )
-        {
-            $this->fifter($mails, 'To');
-        }
+        $this->fifter($mails, 'To');
 
         return $this;
     }
@@ -71,15 +62,11 @@ trait MailHubSendTrait
      */
     public function cc($mails = '')
     {
-        if ( empty($mails) )
-        {
+        if (empty($mails)) {
             return false;
         }
 
-        if ( is_array($mails) )
-        {
-            $this->fifter($mails, 'CC');
-        }
+        $this->fifter($mails, 'CC');
 
         return $this;
     }
@@ -90,15 +77,11 @@ trait MailHubSendTrait
      */
     public function bcc($mails = '')
     {
-        if ( empty($mails) )
-        {
+        if (empty($mails)) {
             return false;
         }
 
-        if ( is_array($mails) )
-        {
-            $this->fifter($mails, 'BCC');
-        }
+        $this->fifter($mails, 'BCC');
 
         return $this;
     }
@@ -109,8 +92,7 @@ trait MailHubSendTrait
      */
     public function replyTo($mail = '')
     {
-        if( !empty($mail) )
-        {
+        if (!empty($mail)) {
             $this->setReplyTo($mail);
         }
         return $this;
@@ -122,13 +104,11 @@ trait MailHubSendTrait
      */
     public function subject($val = '')
     {
-        if( !empty($val) )
-        {
-            $this->setSubject( trim($val) );
+        if (!empty($val)) {
+            $this->setSubject(trim($val));
         }
         return $this;
     }
-
 
     /**
      * Set up mail subject content
@@ -136,9 +116,8 @@ trait MailHubSendTrait
      */
     public function html($val = '')
     {
-        if( !empty($val) )
-        {
-            $this->setHtml( trim($val) );
+        if (!empty($val)) {
+            $this->setHtml(trim($val));
         }
         return $this;
     }
@@ -150,42 +129,32 @@ trait MailHubSendTrait
     public function xsmtpapi($data = [])
     {
 
-        array_map(function($val) use ($data)
-        {
-            switch ($val) 
-            {
+        array_map(function ($val) use ($data) {
+            switch ($val) {
                 case 'swiftmail':
                     // Xsmtpapi array to string
-                    foreach ($data as $k => $field) 
-                    {
-                        if( is_array($field) )
-                        {
+                    foreach ($data as $k => $field) {
+                        if (is_array($field)) {
                             $data[$k] = current($field);
                         }
                     }
                     return $this->xsmtpapi['swiftmail'] = $data;
                 default:
-                    $datas = [];
+                    $datas     = [];
                     $toAddress = $this->to[$val];
-                    foreach ($data as $k => $field) 
-                    {
-                        if ( is_array($field) )
-                        {
+                    foreach ($data as $k => $field) {
+                        if (is_array($field)) {
                             $newField = [];
-                            foreach (array_keys($toAddress) as $id) 
-                            {
+                            foreach (array_keys($toAddress) as $id) {
                                 $newField[] = $field[$id];
                             }
-                            $datas['%'.$k.'%'] = $newField;
-                        }
-                        else
-                        {
+                            $datas['%' . $k . '%'] = $newField;
+                        } else {
                             $newField = [];
-                            for ($i=0; $i < count($toAddress); $i++) 
-                            { 
-                               $newField[] = $field;
+                            for ($i = 0; $i < count($toAddress); $i++) {
+                                $newField[] = $field;
                             }
-                            $datas['%'.$k.'%'] = $newField;
+                            $datas['%' . $k . '%'] = $newField;
                         }
                     }
                     return $this->xsmtpapi[$val] = json_encode(['to' => array_values($this->to[$val]), 'sub' => $datas]);
@@ -201,8 +170,7 @@ trait MailHubSendTrait
      */
     public function templateInvokeName($blade = '')
     {
-        array_map(function($val) use ($blade)
-        {
+        array_map(function ($val) use ($blade) {
             switch ($val) {
                 case 'swiftmail':
                     return $this->templateInvokeName['swiftmail'] = $blade;
@@ -225,25 +193,25 @@ trait MailHubSendTrait
 
         $fifterMail = [];
 
-        if( empty($fifter) )
-        {
+        if (empty($fifter)) {
             $fifterMail[$this->getGateways()] = $mails;
             return $this->setTo($fifterMail);
         }
 
-        foreach ($mails as $k => $mail) 
-        {
-            foreach ($fifter as $doman => $gateway) 
-            {
-                if( strpos($mail, $doman) )
-                {
+        if (!is_array($mails)) {
+            $mails = [$mails];
+        }
+
+        foreach ($mails as $k => $mail) {
+            foreach ($fifter as $doman => $gateway) {
+                if (strpos($mail, $doman)) {
                     $fifterMail[$gateway][] = array_pull($mails, $k);
                 }
             }
         }
         $fifterMail[$this->getGateways()] = $mails;
-        
-        $this->{'set'.$type}($fifterMail);
+
+        $this->{'set' . $type}($fifterMail);
     }
 
 }

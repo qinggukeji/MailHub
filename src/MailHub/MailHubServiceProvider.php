@@ -49,7 +49,7 @@ class MailHubServiceProvider extends ServiceProvider
             'send' => new ReflectionClass('MrVokia\MailHub\MailHubSend'),
         ];
 
-        $this->app->bind('mailhub', function ($app) {
+        $this->app->bind('mailhub', function ($app) use ($module) {
             return new MailHub($module);
         });
 
