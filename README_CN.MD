@@ -51,11 +51,11 @@ public function example(MailHub $mailhub)
 	//or
 
 	MailHub::send()
-		->to(['1@test.com', '2@test.com'])
-		->cc(['3@test.com'])
-		->subject('example')
-		->html('example content')
-		->start()
+			->to(['1@test.com', '2@test.com'])
+			->cc(['3@test.com'])
+			->subject('example')
+			->html('example content')
+			->start()
 }
 
 /**
