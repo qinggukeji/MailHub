@@ -33,49 +33,51 @@
 	
 ##使用方法:
 
-	use MrVokia\MailHub\MailHub;
-	
-	/**
-	 * 发送普通邮件
-	 */
-	public function example(MailHub $mailhub)
-	{
-		$mailhub->send()
-                ->to(['1@test.com', '2@test.com'])
-                ->cc(['3@test.com'])
-                ->subject('example')
-                ->html('example content')
-                ->start()
-        //or
-		MailHub::send()
-               ->to(['1@test.com', '2@test.com'])
-               ->cc(['3@test.com'])
-               ->subject('example')
-               ->html('example content')
-               ->start()
-	}
+```php
+use MrVokia\MailHub\MailHub;
 
-	/**
-	 * 发送模板邮件
-	 */
-	public function exampleTemplate(MailHub $mailhub)
-	{
-		$mailhub->send()
-                ->to(['1@test.com', '2@test.com'])
-                ->subject('example')
-                ->xsmtpapi([
-        				'active' => ['test', 'test2']
-        		 ])
-                ->templateInvokeName('mail.register')
-                ->start()
-        //or
-		MailHub::send()
-               ->to(['1@test.com', '2@test.com'])
-               ->cc(['3@test.com'])
-               ->subject('example')
-                ->xsmtpapi([
-        				'active' => ['test', 'test2']
-        		 ])
-                ->templateInvokeName('mail.register')
-               ->start()
-	}
+/**
+ * 发送普通邮件
+ */
+public function example(MailHub $mailhub)
+{
+	$mailhub->send()
+	        ->to(['1@test.com', '2@test.com'])
+	        ->cc(['3@test.com'])
+	        ->subject('example')
+	        ->html('example content')
+	        ->start()
+	//or
+	MailHub::send()
+		->to(['1@test.com', '2@test.com'])
+		->cc(['3@test.com'])
+		->subject('example')
+		->html('example content')
+		->start()
+}
+
+/**
+ * 发送模板邮件
+ */
+public function exampleTemplate(MailHub $mailhub)
+{
+	$mailhub->send()
+		->to(['1@test.com', '2@test.com'])
+		->subject('example')
+		->xsmtpapi([
+				'active' => ['test', 'test2']
+			])
+		->templateInvokeName('mail.register')
+		->start()
+	//or
+	MailHub::send()
+		->to(['1@test.com', '2@test.com'])
+		->cc(['3@test.com'])
+		->subject('example')
+		->xsmtpapi([
+					'active' => ['test', 'test2']
+			 	])
+		->templateInvokeName('mail.register')
+		->start()
+}
+```
