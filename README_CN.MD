@@ -47,7 +47,9 @@ public function example(MailHub $mailhub)
 	        ->subject('example')
 	        ->html('example content')
 	        ->start()
+
 	//or
+
 	MailHub::send()
 		->to(['1@test.com', '2@test.com'])
 		->cc(['3@test.com'])
@@ -69,7 +71,9 @@ public function exampleTemplate(MailHub $mailhub)
 			])
 		->templateInvokeName('mail.register')
 		->start()
+
 	//or
+
 	MailHub::send()
 		->to(['1@test.com', '2@test.com'])
 		->cc(['3@test.com'])
