@@ -72,7 +72,7 @@ public function exampleTemplate(MailHub $mailhub)
         	->to(['1@test.com', '2@test.com'])
         	->subject('example')
         	->xsmtpapi([
-				'active' => ['test', 'test2']
+			'active' => ['test', 'test2']
 		])
         	->templateInvokeName('mail.register')
         	->start()
@@ -82,7 +82,7 @@ public function exampleTemplate(MailHub $mailhub)
        		->cc(['3@test.com'])
        		->subject('example')
         	->xsmtpapi([
-				'active' => ['test', 'test2']
+			'active' => ['test', 'test2']
 		])
         	->templateInvokeName('mail.register')
        		->start()
