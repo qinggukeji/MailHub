@@ -40,52 +40,51 @@ A rule engine is employed to post emails to different domains by corresponding s
 
 ##How to use:
 
+```php
+use MrVokia\MailHub\MailHub;
 
-	use MrVokia\MailHub\MailHub;
-	
-	/**
-	 * Send mail
-	 */
-	public function example(MailHub $mailhub)
-	{
-		$mailhub->send()
-                ->to(['1@test.com', '2@test.com'])
-                ->cc(['3@test.com'])
-                ->subject('example')
-                ->html('example content')
-                ->start()
-        //or
-		MailHub::send()
-               ->to(['1@test.com', '2@test.com'])
-               ->cc(['3@test.com'])
-               ->subject('example')
-               ->html('example content')
-               ->start()
-	}
+/**
+ * Send mail
+ */
+public function example(MailHub $mailhub)
+{
+	$mailhub->send()
+        	->to(['1@test.com', '2@test.com'])
+        	->cc(['3@test.com'])
+        	->subject('example')
+        	->html('example content')
+        	->start()
+	//or
+	MailHub::send()
+			->to(['1@test.com', '2@test.com'])
+			->cc(['3@test.com'])
+			->subject('example')
+			->html('example content')
+			->start()
+}
 
-	/**
-	 * Send template mail
-	 */
-	public function exampleTemplate(MailHub $mailhub)
-	{
-		$mailhub->send()
-                ->to(['1@test.com', '2@test.com'])
-                ->subject('example')
-                ->xsmtpapi([
-        				'active' => ['test', 'test2']
-        		 ])
-                ->templateInvokeName('mail.register')
-                ->start()
-        //or
-		MailHub::send()
-               ->to(['1@test.com', '2@test.com'])
-               ->cc(['3@test.com'])
-               ->subject('example')
-                ->xsmtpapi([
-        				'active' => ['test', 'test2']
-        		 ])
-                ->templateInvokeName('mail.register')
-               ->start()
-	}
-
-	
+/**
+ * Send template mail
+ */
+public function exampleTemplate(MailHub $mailhub)
+{
+	$mailhub->send()
+        	->to(['1@test.com', '2@test.com'])
+        	->subject('example')
+        	->xsmtpapi([
+				'active' => ['test', 'test2']
+		])
+        	->templateInvokeName('mail.register')
+        	->start()
+	//or
+	MailHub::send()
+       		->to(['1@test.com', '2@test.com'])
+       		->cc(['3@test.com'])
+       		->subject('example')
+        	->xsmtpapi([
+				'active' => ['test', 'test2']
+		])
+        	->templateInvokeName('mail.register')
+       		->start()
+}
+```	
