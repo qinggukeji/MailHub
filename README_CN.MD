@@ -64,24 +64,24 @@ public function example(MailHub $mailhub)
 public function exampleTemplate(MailHub $mailhub)
 {
 	$mailhub->send()
-		->to(['1@test.com', '2@test.com'])
-		->subject('example')
-		->xsmtpapi([
-				'active' => ['test', 'test2']
-			])
-		->templateInvokeName('mail.register')
-		->start()
+			->to(['1@test.com', '2@test.com'])
+			->subject('example')
+			->xsmtpapi([
+					'active' => ['test', 'test2']
+				])
+			->templateInvokeName('mail.register')
+			->start()
 
 	//or
 
 	MailHub::send()
-		->to(['1@test.com', '2@test.com'])
-		->cc(['3@test.com'])
-		->subject('example')
-		->xsmtpapi([
-					'active' => ['test', 'test2']
-			 	])
-		->templateInvokeName('mail.register')
-		->start()
+			->to(['1@test.com', '2@test.com'])
+			->cc(['3@test.com'])
+			->subject('example')
+			->xsmtpapi([
+						'active' => ['test', 'test2']
+				 	])
+			->templateInvokeName('mail.register')
+			->start()
 }
 ```
