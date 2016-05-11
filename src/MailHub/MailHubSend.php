@@ -67,6 +67,7 @@ class MailHubSend implements MailHubSendInterface
             'bcc'      => '',
             'replyTo'  => $this->replyTo,
             'subject'  => $this->subject,
+            'attach'     => $this->attach,
             'html'     => $this->html,
         ];
 
@@ -107,6 +108,7 @@ class MailHubSend implements MailHubSendInterface
             'replyTo'            => $this->replyTo,
             'xsmtpapi'           => '',
             'subject'            => $this->subject,
+            'attach'     => $this->attach,
             'templateInvokeName' => '',
         ];
 
@@ -154,7 +156,7 @@ class MailHubSend implements MailHubSendInterface
     private function swiftMailSend($params)
     {
         Mail::raw($params['html'], function ($message) use ($params) {
-            $message->to($params['to'])->subject($params['subject']);
+            $message->attach($params['attach'])->to($params['to'])->subject($params['subject']);
         });
     }
 
@@ -183,7 +185,7 @@ class MailHubSend implements MailHubSendInterface
     private function swiftMailTemplateSend($params)
     {
         Mail::send($params['templateInvokeName'], $params['xsmtpapi'], function ($message) use ($params) {
-            $message->to($params['to'])->subject($params['subject']);
+            $message->attach($params['attach'])->to($params['to'])->subject($params['subject']);
         });
     }
 }

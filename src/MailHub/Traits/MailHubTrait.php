@@ -84,6 +84,12 @@ trait MailHubTrait
     private $xsmtpapi;
 
     /**
+     * Attach for e-mail
+     * @var string
+     */
+    private $attach;
+
+    /**
      * Forcibly gateway
      * @var string
      */

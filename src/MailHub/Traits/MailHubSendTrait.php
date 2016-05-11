@@ -165,6 +165,16 @@ trait MailHubSendTrait
     }
 
     /**
+     * Sets the attach of the mail
+     * @param  string $blade template name
+     */
+    public function attach($file = '')
+    {
+        $this->attach = $file;
+        return $this;
+    }
+
+    /**
      * Sets the name of the mail template
      * @param  string $blade template name
      */
