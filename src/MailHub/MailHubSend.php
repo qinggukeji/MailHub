@@ -156,7 +156,10 @@ class MailHubSend implements MailHubSendInterface
     private function swiftMailSend($params)
     {
         Mail::raw($params['html'], function ($message) use ($params) {
-            $message->attach($params['attach'])->to($params['to'])->subject($params['subject']);
+            if( $params['attach'] ) {
+                $message->attach($params['attach']);
+            }
+            $message->to($params['to'])->subject($params['subject']);
         });
     }
 
@@ -185,7 +188,10 @@ class MailHubSend implements MailHubSendInterface
     private function swiftMailTemplateSend($params)
     {
         Mail::send($params['templateInvokeName'], $params['xsmtpapi'], function ($message) use ($params) {
-            $message->attach($params['attach'])->to($params['to'])->subject($params['subject']);
+            if( $params['attach'] ) {
+                $message->attach($params['attach']);
+            }
+            $message->to($params['to'])->subject($params['subject']);
         });
     }
 }
