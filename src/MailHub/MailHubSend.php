@@ -159,7 +159,9 @@ class MailHubSend implements MailHubSendInterface
             if( $params['attach'] ) {
                 $message->attach($params['attach']);
             }
-            $message->to($params['to'])->subject($params['subject']);
+            $message->to($params['to'])
+                    ->from(env('MAIL_USERNAME'), $params['fromName'])
+                    ->subject($params['subject']);
         });
     }
 
@@ -182,7 +184,7 @@ class MailHubSend implements MailHubSendInterface
     }
 
     /**
-     * Api mail template send
+     * swift mail template send
      * @return [null]
      */
     private function swiftMailTemplateSend($params)
@@ -191,7 +193,9 @@ class MailHubSend implements MailHubSendInterface
             if( $params['attach'] ) {
                 $message->attach($params['attach']);
             }
-            $message->to($params['to'])->subject($params['subject']);
+            $message->to($params['to'])
+                    ->from(env('MAIL_USERNAME'), $params['fromName'])
+                    ->subject($params['subject']);
         });
     }
 }

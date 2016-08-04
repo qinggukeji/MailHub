@@ -30,6 +30,19 @@ trait MailHubSendTrait
     }
 
     /**
+     * Set up mail sender name
+     * @param string sender name
+     */
+    public function fromName($name = '')
+    {
+        if (!empty($name)) {
+            $this->setFromName($name);
+        }
+
+        return $this;
+    }
+
+    /**
      * Set api user to config[default:trigger]
      * @param string $val trigger or batch
      */
