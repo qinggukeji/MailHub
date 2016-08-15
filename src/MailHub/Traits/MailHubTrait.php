@@ -247,6 +247,15 @@ trait MailHubTrait
     }
 
     /**
+     * Get template tag
+     * @return string
+     */
+    public function getTemplateTag()
+    {
+        return config('mailhub.template_tag');
+    }
+
+    /**
      * Get sender from config
      * @return string
      */

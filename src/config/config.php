@@ -1,9 +1,9 @@
 <?php
 
 	/**
-	 *	This contains MailHub all the configuration 
+	 *	This contains MailHub all the configuration
 	 */
-	
+
 	return [
 
 		/**
@@ -64,12 +64,19 @@
 			],
 
 			/**
-			 * Swiftmail config 
+			 * Swiftmail config
 			 * if you don't need swiftmai, then you can remove this configuration item
 			 */
 			'swiftmail' => [
 			]
 		],
+
+
+		/**
+		 * Set your third party template tag
+		 */
+		'template_tag' => env('MAIL_TEMPLATE_TAG', ''),
+
 
 		/**
 		 * Mail distribution filter configuration

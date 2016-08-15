@@ -198,7 +198,7 @@ trait MailHubSendTrait
                 case 'swiftmail':
                     return $this->templateInvokeName['swiftmail'] = $blade;
                 default:
-                    return $this->templateInvokeName[$val] = str_replace('.', '_', $blade);
+                    return $this->templateInvokeName[$val] = str_replace('.', '_', $blade) . $this->getTemplateTag();
             }
         }, $this->getAllGateways());
 
