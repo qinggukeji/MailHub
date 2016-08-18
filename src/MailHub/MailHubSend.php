@@ -149,10 +149,10 @@ class MailHubSend implements MailHubSendInterface
         $async = $this->getAsync();
         if (!$async) {
             
-            //send
+            // send
             $client = new \GuzzleHttp\Client();
             
-            //sync send
+            // sync send
             $res = $client->request('post', $uri, [
                 'form_params' => $params,
             ]);
@@ -172,10 +172,10 @@ class MailHubSend implements MailHubSendInterface
 
             $promise->then(
                 function (ResponseInterface $res) {
-                    //to do(log)
+                    // to do(log)
                 },
                 function (RequestException $e) {
-                    //to do(log)
+                    // to do(log)
                 }
             );
             $aggregate = Promise\all([$promise]);
@@ -215,10 +215,10 @@ class MailHubSend implements MailHubSendInterface
         $async = $this->getAsync();
         if (!$async) {
             
-            //send
+            // send
             $client = new \GuzzleHttp\Client();
             
-            //sync send
+            // sync send
             $res = $client->request('post', $uri, [
                 'form_params' => $params,
             ]);
@@ -238,10 +238,10 @@ class MailHubSend implements MailHubSendInterface
 
             $promise->then(
                 function (ResponseInterface $res) {
-                    //to do(log)
+                    // to do(log)
                 },
                 function (RequestException $e) {
-                    //to do(log)
+                    // to do(log)
                 }
             );
             $aggregate = Promise\all([$promise]);
