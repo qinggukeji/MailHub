@@ -46,11 +46,22 @@ class MailHub
      *
      * @return object
      */
-    public function send($gateway = '')
+    public function send($options = [])
     {
-        if (!empty($gateway)) {
-            $this->send->setForcibly($gateway);
+        if (!empty($options['gateway'])) {
+            $this->send->setForcibly($options['gateway']);
         }
+
+        //设置异步请求配置
+        if (!empty($options['async'])) {
+            $this->send->setAsync($options['async']);
+        }
+
+        //测试邮件配置
+        if (!empty($options['pretend'])) {
+            $this->send->setPretend($options['pretend']);
+        }
+
         return $this->send;
     }
 
