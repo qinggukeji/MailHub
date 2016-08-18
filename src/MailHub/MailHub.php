@@ -46,11 +46,22 @@ class MailHub
      *
      * @return object
      */
-    public function send($gateway = '')
+    public function send($options = [])
     {
-        if (!empty($gateway)) {
-            $this->send->setForcibly($gateway);
+        if (!empty($options['gateway'])) {
+            $this->send->setForcibly($options['gateway']);
         }
+
+        // set async request
+        if (!empty($options['async'])) {
+            $this->send->setAsync($options['async']);
+        }
+
+        // set test mail config
+        if (!empty($options['pretend'])) {
+            $this->send->setPretend($options['pretend']);
+        }
+
         return $this->send;
     }
 

@@ -220,6 +220,14 @@ trait MailHubSendTrait
             $mails = [$mails];
         }
 
+        // get test email config
+        if ($this->getPretend()) {
+
+            // get test email name group
+            $mailTestName = $this->getMailTestName();
+            $mails = [$mailTestName];
+        }
+
         // Check fifter
         if (empty($fifter)) {
             $fifterMail[$this->getGateways()] = $mails;
