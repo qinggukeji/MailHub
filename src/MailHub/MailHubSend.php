@@ -140,13 +140,46 @@ class MailHubSend implements MailHubSendInterface
         //change mail gateway
         $this->setGateways($gateway);
 
-        //send
-        $client = new \GuzzleHttp\Client();
-        $res    = $client->request('post', $uri, [
-            'form_params' => $params,
-        ]);
+        //get Async config
+        $async = $this->getAsync();
+        if (!$async) {
+            
+            //send
+            $client = new \GuzzleHttp\Client();
+            
+            //sync send
+            $res = $client->request('post', $uri, [
+                'form_params' => $params,
+            ]);
 
-        return (string) $res->getBody();
+            return (string) $res->getBody();
+        }
+        else {
+           
+            //async send
+            $curl = new CurlMultiHandler();
+            $handler = HandlerStack::create($curl);
+
+            //send
+            $client = new \GuzzleHttp\Client(['handler' => $handler]);
+            $promise = $client->requestAsync('post', $uri, [
+                'form_params' => $params,
+            ]);
+
+            $promise->then(
+                function (ResponseInterface $res) {
+                    //to do(log)
+                },
+                function (RequestException $e) {
+                    //to do(log)
+                }
+            );
+            $aggregate = Promise\all([$promise]);
+            while (!Promise\is_settled($aggregate)) {
+                $curl->tick();
+            }
+            return true;
+        }
     }
 
     /**
@@ -174,13 +207,46 @@ class MailHubSend implements MailHubSendInterface
         //change mail gateway
         $this->setGateways($gateway);
 
-        //send
-        $client = new \GuzzleHttp\Client();
-        $res    = $client->request('post', $uri, [
-            'form_params' => $params,
-        ]);
+        //get Async config
+        $async = $this->getAsync();
+        if (!$async) {
+            
+            //send
+            $client = new \GuzzleHttp\Client();
+            
+            //sync send
+            $res = $client->request('post', $uri, [
+                'form_params' => $params,
+            ]);
 
-        return (string) $res->getBody();
+            return (string) $res->getBody();
+        }
+        else {
+           
+            //async send
+            $curl = new CurlMultiHandler();
+            $handler = HandlerStack::create($curl);
+
+            //send
+            $client = new \GuzzleHttp\Client(['handler' => $handler]);
+            $promise = $client->requestAsync('post', $uri, [
+                'form_params' => $params,
+            ]);
+
+            $promise->then(
+                function (ResponseInterface $res) {
+                    //to do(log)
+                },
+                function (RequestException $e) {
+                    //to do(log)
+                }
+            );
+            $aggregate = Promise\all([$promise]);
+            while (!Promise\is_settled($aggregate)) {
+                $curl->tick();
+            }
+            return true;
+        }
     }
 
     /**

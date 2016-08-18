@@ -247,15 +247,6 @@ trait MailHubTrait
     }
 
     /**
-     * Get template tag
-     * @return string
-     */
-    public function getTemplateTag()
-    {
-        return config('mailhub.template_tag');
-    }
-
-    /**
      * Get sender from config
      * @return string
      */
@@ -370,6 +361,73 @@ trait MailHubTrait
     public function setForcibly($gateway)
     {
         $this->forcibly = $gateway;
+    }
+
+    /**
+     * Setting the mail async config
+     * @param string $gateway gateway name
+     */
+    public function setAsync($async = '')
+    {
+        $this->async = $async;
+    }
+
+    /**
+     * get the mail async config
+     */
+    public function getAsync()
+    {
+        if (empty($this->async)) {
+            $async = array_get($this->getConfig(), 'async');
+            if (!isset($async)) {
+                return $this->_throwException('async');
+            }
+            $this->async = $async;
+        }
+        
+        return $this->async;
+    }
+
+    /**
+     * Setting the test mail config
+     * @param string $gateway gateway name
+     */
+    public function setPretend($pretend)
+    {
+        $this->pretend = $pretend;
+    }
+
+    /**
+     * get the test mail config
+     * @param string $gateway gateway name
+     */
+    public function getPretend()
+    {
+        if (empty($this->pretend)) {
+            $pretend = config('mailhub.pretend');
+            if (!isset($pretend))
+             {
+                return $this->_throwException('pretend');
+            }
+            $this->pretend = $pretend;
+        }
+        
+        return $this->pretend;
+    }
+
+    /**
+     * get the test name mail group
+     * @param string $gateway gateway name
+     */
+    public function getMailTestName()
+    {
+        $mailTestName = config('mailhub.mail_testname');
+        
+        if (!$mailTestName) {
+                return $this->_throwException('mail_testname');
+        }
+
+        return $mailTestName;
     }
 
     /**

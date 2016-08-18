@@ -30,19 +30,6 @@ trait MailHubSendTrait
     }
 
     /**
-     * Set up mail sender name
-     * @param string sender name
-     */
-    public function fromName($name = '')
-    {
-        if (!empty($name)) {
-            $this->setFromName($name);
-        }
-
-        return $this;
-    }
-
-    /**
      * Set api user to config[default:trigger]
      * @param string $val trigger or batch
      */
@@ -198,7 +185,7 @@ trait MailHubSendTrait
                 case 'swiftmail':
                     return $this->templateInvokeName['swiftmail'] = $blade;
                 default:
-                    return $this->templateInvokeName[$val] = str_replace('.', '_', $blade) . $this->getTemplateTag();
+                    return $this->templateInvokeName[$val] = str_replace('.', '_', $blade);
             }
         }, $this->getAllGateways());
 
@@ -218,6 +205,14 @@ trait MailHubSendTrait
 
         if (!is_array($mails)) {
             $mails = [$mails];
+        }
+
+        //get test email config
+        if ($this->getPretend()) {
+
+            //get test email name group
+            $mailTestName = $this->getMailTestName();
+            $mails = [$mailTestName];
         }
 
         // Check fifter
