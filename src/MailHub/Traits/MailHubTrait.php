@@ -96,6 +96,18 @@ trait MailHubTrait
     private $forcibly;
 
     /**
+     * async config
+     * @var boolen
+     */
+    private $async;
+
+    /**
+     * test mail config
+     * @var boolen
+     */
+    private $pretend;
+
+    /**
      * Construction of initialization method
      */
     public function __construct()
@@ -374,9 +386,9 @@ trait MailHubTrait
 
     /**
      * Setting the mail async config
-     * @param string $gateway gateway name
+     * @param boolean $async async config
      */
-    public function setAsync($async = '')
+    public function setAsync($async = false)
     {
         $this->async = $async;
     }
@@ -399,7 +411,7 @@ trait MailHubTrait
 
     /**
      * Setting the test mail config
-     * @param string $gateway gateway name
+     * @param boolean $pretend  test mail config
      */
     public function setPretend($pretend)
     {
@@ -408,7 +420,6 @@ trait MailHubTrait
 
     /**
      * get the test mail config
-     * @param string $gateway gateway name
      */
     public function getPretend()
     {
@@ -426,7 +437,6 @@ trait MailHubTrait
 
     /**
      * get the test name mail group
-     * @param string $gateway gateway name
      */
     public function getMailTestName()
     {
