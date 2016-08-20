@@ -96,6 +96,30 @@ trait MailHubTrait
     private $forcibly;
 
     /**
+     * Set test sender target
+     * @var string
+     */
+    private $pretend;
+
+    /**
+     * Set async send
+     * @var string
+     */
+    private $async;
+
+    /**
+     * Dispatch set target queue
+     * @var string
+     */
+    private $queue;
+
+    /**
+     * Set target queue (default: mailer)
+     * @var string
+     */
+    private $queueTarget;
+
+    /**
      * Construction of initialization method
      */
     public function __construct()
@@ -150,7 +174,7 @@ trait MailHubTrait
         $config = config('mailhub.gateways.' . $this->gateway);
 
         if (empty($config)) {
-            return $this->_throwException('gateways');
+            return $this->throwException('gateways');
         }
         return $config;
     }
@@ -164,7 +188,7 @@ trait MailHubTrait
         $options = array_get($this->getConfig(), 'options');
 
         if (empty($options)) {
-            return $this->_throwException('options');
+            return $this->throwException('options');
         }
         return $options;
     }
@@ -178,7 +202,7 @@ trait MailHubTrait
         $apiUri = array_get($this->getConfig(), 'api_uri');
 
         if (empty($apiUri)) {
-            return $this->_throwException('api_uri');
+            return $this->throwException('api_uri');
         }
         return $apiUri;
     }
@@ -204,7 +228,7 @@ trait MailHubTrait
         $apiUser = array_get($this->getOption(), 'api_user.' . $this->type);
 
         if (empty($apiUser)) {
-            return $this->_throwException('api_user.' . $this->type);
+            return $this->throwException('api_user.' . $this->type);
         }
         return $apiUser;
     }
@@ -218,7 +242,7 @@ trait MailHubTrait
         $apiKey = array_get($this->getOption(), 'api_key');
 
         if (empty($apiKey)) {
-            return $this->_throwException('api_key');
+            return $this->throwException('api_key');
         }
         return $apiKey;
     }
@@ -232,7 +256,7 @@ trait MailHubTrait
         $method = array_get($this->getOption(), 'method');
 
         if (empty($method)) {
-            return $this->_throwException('method');
+            return $this->throwException('method');
         }
         return $method;
     }
@@ -374,9 +398,9 @@ trait MailHubTrait
 
     /**
      * Setting the mail async config
-     * @param string $gateway gateway name
+     * @param bool $async true|false(default)
      */
-    public function setAsync($async = '')
+    public function setAsync($async = false)
     {
         $this->async = $async;
     }
@@ -386,42 +410,60 @@ trait MailHubTrait
      */
     public function getAsync()
     {
-        if (empty($this->async)) {
-            $async = array_get($this->getConfig(), 'async');
-            if (!isset($async)) {
-                return $this->_throwException('async');
-            }
-            $this->async = $async;
-        }
-        
         return $this->async;
     }
 
     /**
      * Setting the test mail config
-     * @param string $gateway gateway name
+     * @param bool $pretend true|false(default)
      */
-    public function setPretend($pretend)
+    public function setPretend($pretend = false)
     {
         $this->pretend = $pretend;
     }
 
     /**
      * get the test mail config
-     * @param string $gateway gateway name
      */
     public function getPretend()
     {
-        if (empty($this->pretend)) {
-            $pretend = config('mailhub.pretend');
-            if (!isset($pretend))
-             {
-                return $this->_throwException('pretend');
-            }
-            $this->pretend = $pretend;
-        }
-        
         return $this->pretend;
+    }
+
+    /**
+     * Setting the queue
+     * @param bool $queue gateway name
+     */
+    public function setQueue($queue = false)
+    {
+        $this->queue = $queue;
+    }
+
+    /**
+     * Setting the queue
+     * @param string $gateway gateway name
+     */
+    public function getQueueTarget()
+    {
+        return $this->queueTarget;
+    }
+
+    /**
+     * Setting the queue
+     * @param bool $queue gateway name
+     */
+    public function setQueueTarget($queueTarget = 'mailer')
+    {
+        $this->queueTarget = $queueTarget;
+    }
+
+    /**
+     * Setting the queue
+     * @param string $gateway gateway name
+     */
+    public function getQueue()
+    {
+        return $this->queue;
     }
 
     /**
@@ -431,9 +473,9 @@ trait MailHubTrait
     public function getMailTestName()
     {
         $mailTestName = config('mailhub.mail_testname');
-        
+
         if (!$mailTestName) {
-                return $this->_throwException('mail_testname');
+                return $this->throwException('mail_testname');
         }
 
         return $mailTestName;
@@ -444,7 +486,7 @@ trait MailHubTrait
      * @param  string $msg Exception message
      * @return MrVokia\MailHub\Exception\MailHubException
      */
-    public function _throwException($msg)
+    public function throwException($msg)
     {
         $msg = 'Not Found Config From ' . $msg;
         throw new MailHubException($msg);

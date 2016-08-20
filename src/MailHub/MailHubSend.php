@@ -11,6 +11,7 @@ namespace MrVokia\MailHub;
 use Mail;
 use MrVokia\MailHub\Contracts\MailHubSendInterface;
 use MrVokia\MailHub\Traits\MailHubSendTrait;
+use MrVokia\MailHub\Jobs\MailSender;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\CurlMultiHandler;
@@ -34,7 +35,7 @@ class MailHubSend implements MailHubSendInterface
         $classSuffix = 'send';
 
         // template send
-        $xsmtpapi           = $this->getXsmtpapi();
+        $xsmtpapi = $this->getXsmtpapi();
         $templateInvokeName = $this->getTemplateInvokeName();
         if (!empty($xsmtpapi) && !empty($templateInvokeName)) {
             $classSuffix = 'send_template';
@@ -42,7 +43,7 @@ class MailHubSend implements MailHubSendInterface
 
         // check method is exist
         if (!in_array($classSuffix, array_keys($methods))) {
-            $this->_throwException($classSuffix);
+            $this->throwException($classSuffix);
         }
 
         // get class name && verify method defined
@@ -51,7 +52,7 @@ class MailHubSend implements MailHubSendInterface
         if (method_exists($this, $className)) {
             return $this->$className($this->getApiUri() . $methods[$classSuffix]);
         }
-        return $this->_throwException($className);
+        return $this->throwException($className);
     }
 
     /**
@@ -83,6 +84,11 @@ class MailHubSend implements MailHubSendInterface
             $params['bcc'] = isset($this->bcc[$gateway]) ? $this->bcc[$gateway] : null;
 
             if ('swiftmail' == $gateway) {
+                if( $this->getQueue() ) {
+                    $job = (new MailSender('Normal', $params))->onQueue($this->getQueueTarget());
+                    dispatch($job);
+                    break;
+                }
                 $this->swiftMailSend($params);
             } else {
                 $params['to']  = isset($params['to']) ? implode(';', $params['to']) : null;
@@ -126,12 +132,17 @@ class MailHubSend implements MailHubSendInterface
             $params['templateInvokeName'] = $this->templateInvokeName[$gateway];
 
             if ('swiftmail' == $gateway) {
+                if( $this->getQueue() ) {
+                    $job = (new MailSender('Template', $params))->onQueue($this->getQueueTarget());
+                    dispatch($job);
+                    break;
+                }
                 $this->swiftMailTemplateSend($params);
             } else {
                 $params['to']  = isset($params['to']) ? implode(';', $params['to']) : null;
                 $params['cc']  = isset($params['cc']) ? implode(';', $params['cc']) : null;
                 $params['bcc'] = isset($params['bcc']) ? implode(';', $params['bcc']) : null;
-                $this->apiMailTemplateSend($uri, $gateway, $params);
+                $this->apiMailSend($uri, $gateway, $params);
             }
         }
     }
@@ -148,10 +159,10 @@ class MailHubSend implements MailHubSendInterface
         // get Async config
         $async = $this->getAsync();
         if (!$async) {
-            
+
             // send
             $client = new \GuzzleHttp\Client();
-            
+
             // sync send
             $res = $client->request('post', $uri, [
                 'form_params' => $params,
@@ -159,7 +170,7 @@ class MailHubSend implements MailHubSendInterface
 
             return (string) $res->getBody();
         } else {
-           
+
             // async send
             $curl = new CurlMultiHandler();
             $handler = HandlerStack::create($curl);
@@ -204,53 +215,57 @@ class MailHubSend implements MailHubSendInterface
 
     /**
      * Api mail template send
+     *
+     * In API SendCloud, the API of the ordinary send and send the template is consistent,
+     * the follow-up will be required to open
+     *
      * @return [json] Api return
      */
-    private function apiMailTemplateSend($uri, $gateway, $params)
-    {
-        // change mail gateway
-        $this->setGateways($gateway);
-
-        // get Async config
-        $async = $this->getAsync();
-        if (!$async) {
-            
-            // send
-            $client = new \GuzzleHttp\Client();
-            
-            // sync send
-            $res = $client->request('post', $uri, [
-                'form_params' => $params,
-            ]);
-
-            return (string) $res->getBody();
-        } else {
-           
-            // async send
-            $curl = new CurlMultiHandler();
-            $handler = HandlerStack::create($curl);
-
-            // send
-            $client = new \GuzzleHttp\Client(['handler' => $handler]);
-            $promise = $client->requestAsync('post', $uri, [
-                'form_params' => $params,
-            ]);
-
-            $promise->then(
-                function (ResponseInterface $res) {
-                    // to do(log)
-                },
-                function (RequestException $e) {
-                    // to do(log)
-                }
-            );
-            $aggregate = Promise\all([$promise]);
-            while (!Promise\is_settled($aggregate)) {
-                $curl->tick();
-            }
-            return true;
-        }
-    }
+    // private function apiMailTemplateSend($uri, $gateway, $params)
+    // {
+    //     // change mail gateway
+    //     $this->setGateways($gateway);
+    //
+    //     // get Async config
+    //     $async = $this->getAsync();
+    //     if (!$async) {
+    //
+    //         // send
+    //         $client = new \GuzzleHttp\Client();
+    //
+    //         // sync send
+    //         $res = $client->request('post', $uri, [
+    //             'form_params' => $params,
+    //         ]);
+    //
+    //         return (string) $res->getBody();
+    //     } else {
+    //
+    //         // async send
+    //         $curl = new CurlMultiHandler();
+    //         $handler = HandlerStack::create($curl);
+    //
+    //         // send
+    //         $client = new \GuzzleHttp\Client(['handler' => $handler]);
+    //         $promise = $client->requestAsync('post', $uri, [
+    //             'form_params' => $params,
+    //         ]);
+    //
+    //         $promise->then(
+    //             function (ResponseInterface $res) {
+    //                 // to do(log)
+    //             },
+    //             function (RequestException $e) {
+    //                 // to do(log)
+    //             }
+    //         );
+    //         $aggregate = Promise\all([$promise]);
+    //         while (!Promise\is_settled($aggregate)) {
+    //             $curl->tick();
+    //         }
+    //         return true;
+    //     }
+    // }
 
     /**
      * swift mail template send

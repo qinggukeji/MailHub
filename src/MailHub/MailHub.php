@@ -62,6 +62,16 @@ class MailHub
             $this->send->setPretend($options['pretend']);
         }
 
+        // setting queue
+        if (!empty($options['queue'])) {
+            $this->send->setQueue($options['queue']);
+        }
+
+        // setting queue target
+        if (!empty($options['queueTarget'])) {
+            $this->send->setQueueTarget($options['queueTarget']);
+        }
+
         return $this->send;
     }
 
