@@ -40,7 +40,7 @@ class MailSender extends Job implements ShouldQueue
     public function handle()
     {
         $params = $this->params;
-        if( $type == 'Normal' ) {
+        if( $this->type == 'Normal' ) {
 
             // Text send
             Mail::raw($params['html'], function ($message) use ($params) {
@@ -51,7 +51,7 @@ class MailSender extends Job implements ShouldQueue
                         ->from(env('MAIL_USERNAME'), $params['fromName'])
                         ->subject($params['subject']);
             });
-        } elseif ( $type == 'Template' ) {
+        } elseif ( $this->type == 'Template' ) {
 
             // Template send
             Mail::send($params['templateInvokeName'], $params['xsmtpapi'], function ($message) use ($params) {
