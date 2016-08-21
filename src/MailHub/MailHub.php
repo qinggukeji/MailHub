@@ -48,29 +48,24 @@ class MailHub
      */
     public function send($options = [])
     {
-        if (!empty($options['gateway'])) {
-            $this->send->setForcibly($options['gateway']);
-        }
+        isset($options['gateway']) ? $gateway = $options['gateway'] : $gateway = 'swiftmail';
+        $this->send->setForcibly($gateway);
 
         // set async request
-        if (!empty($options['async'])) {
-            $this->send->setAsync($options['async']);
-        }
+        isset($options['async']) ? $async = $options['async'] : $async = false;
+        $this->send->setAsync($async);
 
         // set test mail config
-        if (!empty($options['pretend'])) {
-            $this->send->setPretend($options['pretend']);
-        }
+        isset($options['pretend']) ? $pretend = $options['pretend'] : $pretend = false;
+        $this->send->setPretend($pretend);
 
         // setting queue
-        if (!empty($options['queue'])) {
-            $this->send->setQueue($options['queue']);
-        }
+        isset($options['queue']) ? $queue = $options['queue'] : $queue = false;
+        $this->send->setQueue($queue);
 
         // setting queue target
-        if (!empty($options['queueTarget'])) {
-            $this->send->setQueueTarget($options['queueTarget']);
-        }
+        isset($options['queueTarget']) ? $queueTarget = $options['queueTarget'] : $queueTarget = 'mailer';
+        $this->send->setQueueTarget($queueTarget);
 
         return $this->send;
     }

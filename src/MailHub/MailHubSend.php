@@ -17,10 +17,11 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class MailHubSend implements MailHubSendInterface
 {
-    use MailHubSendTrait;
+    use MailHubSendTrait, DispatchesJobs;
 
     /**
      * Start mail send
@@ -86,7 +87,7 @@ class MailHubSend implements MailHubSendInterface
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
                     $job = (new MailSender('Normal', $params))->onQueue($this->getQueueTarget());
-                    dispatch($job);
+                    $this->dispatch($job);
                     break;
                 }
                 $this->swiftMailSend($params);
@@ -134,7 +135,7 @@ class MailHubSend implements MailHubSendInterface
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
                     $job = (new MailSender('Template', $params))->onQueue($this->getQueueTarget());
-                    dispatch($job);
+                    $this->dispatch($job);
                     break;
                 }
                 $this->swiftMailTemplateSend($params);

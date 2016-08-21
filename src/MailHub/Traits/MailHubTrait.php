@@ -400,13 +400,13 @@ trait MailHubTrait
      * Setting the mail async config
      * @param bool $async true|false(default)
      */
-    public function setAsync($async = false)
+    public function setAsync($async)
     {
         $this->async = $async;
     }
 
     /**
-     * get the mail async config
+     * Get the mail async config
      */
     public function getAsync()
     {
@@ -417,13 +417,13 @@ trait MailHubTrait
      * Setting the test mail config
      * @param bool $pretend true|false(default)
      */
-    public function setPretend($pretend = false)
+    public function setPretend($pretend)
     {
         $this->pretend = $pretend;
     }
 
     /**
-     * get the test mail config
+     * Get the test mail config
      */
     public function getPretend()
     {
@@ -432,38 +432,36 @@ trait MailHubTrait
 
     /**
      * Setting the queue
-     * @param bool $queue gateway name
+     * @param bool $queue queue status
      */
-    public function setQueue($queue = false)
+    public function setQueue($queue)
     {
         $this->queue = $queue;
     }
 
     /**
-     * Setting the queue
-     * @param string $gateway gateway name
+     * Get queue
      */
-    public function getQueueTarget()
+    public function getQueue()
     {
-        return $this->queueTarget;
+        return $this->queue;
     }
 
     /**
-     * Setting the queue
-     * @param bool $queue gateway name
+     * Setting the queue target
+     * @param string $queueTarget queue gateway name
      */
-    public function setQueueTarget($queueTarget = 'mailer')
+    public function setQueueTarget($queueTarget)
     {
         $this->queueTarget = $queueTarget;
     }
 
     /**
-     * Setting the queue
-     * @param string $gateway gateway name
+     * Get queue target
      */
-    public function getQueue()
+    public function getQueueTarget()
     {
-        return $this->queue;
+        return $this->queueTarget;
     }
 
     /**

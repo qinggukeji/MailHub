@@ -2,6 +2,7 @@
 
 namespace MrVokia\MailHub\Jobs;
 
+use Mail;
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,12 +15,12 @@ class MailSender extends Job implements ShouldQueue
     /**
      * Send type
      */
-    private $type;
+    protected $type;
 
     /**
      * Send params
      */
-    private $params;
+    protected $params;
 
     /**
      * Create a new job instance.
