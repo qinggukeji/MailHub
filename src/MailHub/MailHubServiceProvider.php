@@ -35,6 +35,8 @@ class MailHubServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerMailHub();
+
+        include __DIR__ . '/../routes.php';
     }
 
     /**
