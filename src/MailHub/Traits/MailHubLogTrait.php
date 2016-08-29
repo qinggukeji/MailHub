@@ -30,7 +30,7 @@ trait MailHubLogTrait
     /**
 	 * set log content
 	 */
-	public function setlogContent($handle = array())
+	public function setLogContent($handle = array())
 	{
 
 		// local is shanghai
@@ -51,7 +51,7 @@ trait MailHubLogTrait
 	{
 		$filesystem = new Filesystem();
 		if (!$logContent || !$logDirPath) return false;
-		if($this->getmailLog())
+		if($this->getMailLog())
 		{
 			// log file all path
 			$logPath = $logDirPath.$this->getLogName();
@@ -87,7 +87,7 @@ trait MailHubLogTrait
 	 * get log config
 	 * @return [bool]          [log config]
 	 */
-	public function getmailLog()
+	public function getMailLog()
 	{	
 		$mailLog = config('mailhub.mail_log');
 		if (!isset($mailLog)) {
@@ -98,7 +98,7 @@ trait MailHubLogTrait
 
 	/**
 	 * get sendcloud log dir
-	 * @return [string]   	    [logpath]
+	 * @return [string]  $dir 	    [logpath]
 	 */
 	public function getSendCloudLogDir()
 	{	
@@ -111,7 +111,7 @@ trait MailHubLogTrait
 
 	/**
 	 * get sendcloud fail log dir
-	 * @return [string]   	    [logpath]
+	 * @return [string]  $dir 	    [logpath]
 	 */
 	public function getSendCloudFailLogDir()
 	{	
@@ -124,7 +124,7 @@ trait MailHubLogTrait
 
 	/**
 	 * get Swiftmail log dir
-	 * @return [string]   	    [logpath]
+	 * @return [string]  $dir 	    [logpath]
 	 */
 	public function getSwiftmailLogDir()
 	{	
@@ -137,7 +137,7 @@ trait MailHubLogTrait
 
 	/**
 	 * get Swiftmail fail log dir
-	 * @return [string]   	    [logpath]
+	 * @return [string]   $dir	    [logpath]
 	 */
 	public function getSwiftmailFailLogDir()
 	{	

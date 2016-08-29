@@ -68,7 +68,7 @@ class CallbackController extends Controller implements MailHubLogInterface
                     break;
             }
             // writing log
-            $logContent = $this->setlogContent($handle);
+            $logContent = $this->setLogContent($handle);
             $fileDir = $this->{$logdir}();
             $this->setLogName($fileSystemName);
             $this->logInfo($logContent, $fileDir);
