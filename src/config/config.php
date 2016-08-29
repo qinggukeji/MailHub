@@ -26,6 +26,11 @@
 	     */
 	    'reply_mail' => 'you_reply_mail@domain.com',
 
+	    /**
+	     * Set test mail log config
+	     */
+	    'mail_log'  => false,
+
 		/**
 		 * Add in each mail gateway here
 		 */
@@ -60,7 +65,12 @@
 	                	'send' => 'mail/send',
 	                	'send_template' => 'mail/sendtemplate',
 	                ]
-				]
+				],
+
+				/**
+	             * webHook app key
+	             */
+	            'webhook_app_key'      => '',
 			],
 
 			/**
@@ -86,4 +96,11 @@
 			'@domain.com' => 'swiftmail'
 		]
 
+		/**
+		 * swift email and sencloud log dir
+		 */
+		'sendcloud_log_dir' => '',
+	    'sendcloud_fail_log_dir' => '',
+	    'swiftmail_log_dir' => '',
+	    'swiftmail_fail_log_dir' => 'QUEUE_INT_FAIL_LOG_DIR',
 	];
