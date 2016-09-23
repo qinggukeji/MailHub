@@ -42,6 +42,7 @@ trait MailHubLogTrait
 		return rtrim($logHandle, ',');
 	}
 
+
 	/**
 	 * write log
 	 * @param  string $logContent [logContent]
@@ -91,7 +92,7 @@ trait MailHubLogTrait
 	{	
 		$mailLog = config('mailhub.mail_log');
 		if (!isset($mailLog)) {
-                return $this->throwException('mail_log');
+                return $this->throwLogException('mail_log');
         }
 		return $mailLog;
 	}
@@ -104,7 +105,7 @@ trait MailHubLogTrait
 	{	
 		$dir = config('mailhub.sendcloud_log_dir');
 		if (!isset($dir)) {
-                return $this->throwException('sendcloud_log_dir');
+                return $this->throwLogException('sendcloud_log_dir');
         }
 		return $dir;
 	}
@@ -117,7 +118,7 @@ trait MailHubLogTrait
 	{	
 		$dir = config('mailhub.sendcloud_fail_log_dir');
 		if (!isset($dir)) {
-                return $this->throwException('sendcloud_fail_log_dir');
+                return $this->throwLogException('sendcloud_fail_log_dir');
         }
 		return $dir;
 	}
@@ -130,7 +131,7 @@ trait MailHubLogTrait
 	{	
 		$dir = config('mailhub.swiftmail_log_dir');
 		if (!isset($dir)) {
-                return $this->throwException('swiftmail_log_dir');
+                return $this->throwLogException('swiftmail_log_dir');
         }
 		return $dir;
 	}
@@ -143,7 +144,7 @@ trait MailHubLogTrait
 	{	
 		$dir = config('mailhub.swiftmail_fail_log_dir');
 		if (!isset($dir)) {
-                return $this->throwException('swiftmail_fail_log_dir');
+                return $this->throwLogException('swiftmail_fail_log_dir');
         }
 		return $dir;
 	}
@@ -171,7 +172,7 @@ trait MailHubLogTrait
      * @param  string $msg Exception message
      * @return MrVokia\MailHub\Exception\MailHubException
      */
-    public function throwException($msg)
+    public function throwLogException($msg)
     {
         $msg = 'Not Found Config From ' . $msg;
         throw new MailHubException($msg);

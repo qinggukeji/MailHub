@@ -18,10 +18,12 @@ use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use MrVokia\MailHub\Traits\MailHubLogTrait;
+use Carbon\Carbon;
 
 class MailHubSend implements MailHubSendInterface
 {
-    use MailHubSendTrait, DispatchesJobs;
+    use MailHubSendTrait, DispatchesJobs, MailHubLogTrait;
 
     /**
      * Start mail send
@@ -183,11 +185,13 @@ class MailHubSend implements MailHubSendInterface
             ]);
 
             $promise->then(
-                function (ResponseInterface $res) {
-                    // to do(log)
+                function (ResponseInterface $res) use($params){
+                    $fileDir = $this->getSendCloudLogDir();
+                    $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params).'\n', $fileDir);
                 },
-                function (RequestException $e) {
-                    // to do(log)
+                function (RequestException $e) use($params){
+                    $fileDir = $this->getSendCloudFailLogDir();
+                    $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params).'\n', $fileDir);
                 }
             );
             $aggregate = Promise\all([$promise]);
