@@ -185,11 +185,11 @@ class MailHubSend implements MailHubSendInterface
             ]);
 
             $promise->then(
-                function (ResponseInterface $res) use($params){
+                function (ResponseInterface $res) use ($params){
                     $fileDir = $this->getSendCloudLogDir();
                     $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params).'\n', $fileDir);
                 },
-                function (RequestException $e) use($params){
+                function (RequestException $e) use ($params){
                     $fileDir = $this->getSendCloudFailLogDir();
                     $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params).'\n', $fileDir);
                 }
