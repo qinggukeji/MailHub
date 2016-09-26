@@ -180,18 +180,22 @@ class MailHubSend implements MailHubSendInterface
 
             // send
             $client = new \GuzzleHttp\Client(['handler' => $handler]);
-            $promise = $client->requestAsync('post', $uri, [
+            $promise = $client->requestAsync('post', $uri, [ 
                 'form_params' => $params,
             ]);
+            if(isset($params['xsmtpapi']))
+            {
+                $params['xsmtpapi'] = json_encode(json_decode($params['xsmtpapi']),JSON_UNESCAPED_UNICODE);
+            }
 
             $promise->then(
                 function (ResponseInterface $res) use ($params){
                     $fileDir = $this->getSendCloudLogDir();
-                    $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params).'\n', $fileDir);
+                    $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params, JSON_UNESCAPED_UNICODE).chr(10), $fileDir);
                 },
                 function (RequestException $e) use ($params){
                     $fileDir = $this->getSendCloudFailLogDir();
-                    $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params).'\n', $fileDir);
+                    $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params, JSON_UNESCAPED_UNICODE).chr(10), $fileDir);
                 }
             );
             $aggregate = Promise\all([$promise]);
