@@ -55,6 +55,10 @@ class MailHub
         isset($options['async']) ? $async = $options['async'] : $async = false;
         $this->send->setAsync($async);
 
+        // set env tag
+        isset($options['env']) ? $env = $options['env'] : $env = false;
+        $this->send->setEnvTag($env);
+
         // set test mail config
         isset($options['pretend']) ? $pretend = $options['pretend'] : $pretend = false;
         $this->send->setPretend($pretend);

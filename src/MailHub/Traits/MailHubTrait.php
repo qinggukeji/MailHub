@@ -97,19 +97,25 @@ trait MailHubTrait
 
     /**
      * Set test sender target
-     * @var string
+     * @var bool
      */
     private $pretend;
 
     /**
+     * Set env tag
+     * @var bool
+     */
+    private $env;
+
+    /**
      * Set async send
-     * @var string
+     * @var bool
      */
     private $async;
 
     /**
      * Dispatch set target queue
-     * @var string
+     * @var bool
      */
     private $queue;
 
@@ -411,6 +417,23 @@ trait MailHubTrait
     public function getAsync()
     {
         return $this->async;
+    }
+
+    /**
+     * Setting the mail env tag config
+     * @param bool $async true|false(default)
+     */
+    public function setEnvTag($env)
+    {
+        $this->env = $env;
+    }
+
+    /**
+     * Get the mail env tag config
+     */
+    public function getEnvTag()
+    {
+        return $this->env;
     }
 
     /**

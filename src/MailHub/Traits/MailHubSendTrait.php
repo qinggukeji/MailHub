@@ -141,6 +141,9 @@ trait MailHubSendTrait
      */
     public function xsmtpapi($data = [])
     {
+        if ($this->getEnvTag()) {
+            $data['env'] = '[' . env('APP_ENV') . ']';
+        }
 
         array_map(function ($val) use ($data) {
             switch ($val) {
