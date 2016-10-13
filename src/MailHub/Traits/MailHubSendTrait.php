@@ -142,9 +142,9 @@ trait MailHubSendTrait
     public function xsmtpapi($data = [])
     {
         if ( $this->getEnvTag() ) {
-            $data['env'] = '[' . env('APP_ENV') . ']';
-            if( $data['env'] == 'product' ) {
-                $data['env'] = '';
+            $data['env'] = '';
+            if( env('APP_ENV') != 'product' ) {
+                $data['env'] = '[' . env('APP_ENV') . ']';
             }
         }
 
