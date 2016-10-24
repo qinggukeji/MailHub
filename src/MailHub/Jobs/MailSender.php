@@ -7,10 +7,12 @@ use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use MrVokia\MailHub\Traits\MailHubLogTrait;
+use Carbon\Carbon;
 
 class MailSender extends Job implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, SerializesModels, MailHubLogTrait;
 
     /**
      * Send type
@@ -31,6 +33,7 @@ class MailSender extends Job implements ShouldQueue
     {
         $this->type = $type;
         $this->params = $params;
+
     }
 
     /**
@@ -41,6 +44,7 @@ class MailSender extends Job implements ShouldQueue
     public function handle()
     {
         $params = $this->params;
+        
         if( $this->type == 'Normal' ) {
 
             // Text send
@@ -64,5 +68,19 @@ class MailSender extends Job implements ShouldQueue
                         ->subject($params['subject']);
             });
         }
+
+        $fileDir = $this->getSwiftmailLogDir();
+        $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params, JSON_UNESCAPED_UNICODE).chr(10), $fileDir);
+    }
+
+
+    /**
+     * Job failed to exec
+     * @return [type] [description]
+     */
+    public function failed()
+    {
+        $fileDir = $this->getSwiftmailFailLogDir();
+        $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($this->params, JSON_UNESCAPED_UNICODE).chr(10), $fileDir);
     }
 }
