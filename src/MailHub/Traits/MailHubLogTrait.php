@@ -25,7 +25,7 @@ trait MailHubLogTrait
      * Log name
      * @var string
      */
-    private $local = 'Asia/Shanghai';
+    private $local = 'UTC';
 
     /**
 	 * set log content
