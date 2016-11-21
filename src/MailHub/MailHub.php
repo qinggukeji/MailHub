@@ -71,6 +71,10 @@ class MailHub
         isset($options['queueTarget']) ? $queueTarget = $options['queueTarget'] : $queueTarget = 'mailer';
         $this->send->setQueueTarget($queueTarget);
 
+        // send locale
+        isset($options['locale']) ? $locale = $options['locale'] : $locale = '';
+        $this->send->setLocale($locale);
+
         return $this->send;
     }
 

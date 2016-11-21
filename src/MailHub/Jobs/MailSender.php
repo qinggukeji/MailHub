@@ -25,15 +25,20 @@ class MailSender extends Job implements ShouldQueue
     protected $params;
 
     /**
+     * Send locale
+     */
+    protected $locale;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($type, $params)
+    public function __construct($type, $params, $locale)
     {
         $this->type = $type;
         $this->params = $params;
-
+        $this->locale = $locale;
     }
 
     /**
@@ -44,7 +49,13 @@ class MailSender extends Job implements ShouldQueue
     public function handle()
     {
         $params = $this->params;
-        
+
+        $localization = \Mcamara\LaravelLocalization\LaravelLocalization::class;
+        if( class_exists($localization) ) {
+            \LaravelLocalization::setLocale($this->locale);
+        }
+        app()->setLocale($this->locale);
+
         if( $this->type == 'Normal' ) {
 
             // Text send

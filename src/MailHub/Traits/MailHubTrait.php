@@ -126,6 +126,12 @@ trait MailHubTrait
     private $queueTarget;
 
     /**
+     * Set locale
+     * @var string
+     */
+    private $locale;
+
+    /**
      * Construction of initialization method
      */
     public function __construct()
@@ -485,6 +491,34 @@ trait MailHubTrait
     public function getQueueTarget()
     {
         return $this->queueTarget;
+    }
+
+    /**
+     * Send locale
+     * @param string $locale send locale
+     */
+    public function setLocale($lang)
+    {
+        $this->locale = $lang;
+    }
+
+    /**
+     * Get locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Get locale tag
+     */
+    public function getLocaleTag()
+    {
+        if( $this->locale ) {
+            return '_' . $this->locale;
+        }
+        return;
     }
 
     /**
