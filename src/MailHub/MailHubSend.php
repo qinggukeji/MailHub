@@ -88,19 +88,12 @@ class MailHubSend implements MailHubSendInterface
 
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
-                    $job = (new MailSender('Normal', $params, $this->getLocale()))->onQueue($this->getQueueTarget());
+                    $job = (new MailSender('Normal', $params))->onQueue($this->getQueueTarget());
                     $this->dispatch($job);
                     break;
                 }
                 $this->swiftMailSend($params);
             } else {
-
-                $localization = \Mcamara\LaravelLocalization\LaravelLocalization::class;
-                if( class_exists($localization) ) {
-                    \LaravelLocalization::setLocale($this->getLocale());
-                }
-                app()->setLocale($this->getLocale());
-
                 $params['to']  = isset($params['to']) ? implode(';', $params['to']) : null;
                 $params['cc']  = isset($params['cc']) ? implode(';', $params['cc']) : null;
                 $params['bcc'] = isset($params['bcc']) ? implode(';', $params['bcc']) : null;
@@ -143,19 +136,12 @@ class MailHubSend implements MailHubSendInterface
 
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
-                    $job = (new MailSender('Template', $params, $this->getLocale()))->onQueue($this->getQueueTarget());
+                    $job = (new MailSender('Template', $params))->onQueue($this->getQueueTarget());
                     $this->dispatch($job);
                     break;
                 }
                 $this->swiftMailTemplateSend($params);
             } else {
-
-                $localization = \Mcamara\LaravelLocalization\LaravelLocalization::class;
-                if( class_exists($localization) ) {
-                    \LaravelLocalization::setLocale($this->getLocale());
-                }
-                app()->setLocale($this->getLocale());
-
                 $params['to']  = isset($params['to']) ? implode(';', $params['to']) : null;
                 $params['cc']  = isset($params['cc']) ? implode(';', $params['cc']) : null;
                 $params['bcc'] = isset($params['bcc']) ? implode(';', $params['bcc']) : null;
@@ -194,7 +180,7 @@ class MailHubSend implements MailHubSendInterface
 
             // send
             $client = new \GuzzleHttp\Client(['handler' => $handler]);
-            $promise = $client->requestAsync('post', $uri, [
+            $promise = $client->requestAsync('post', $uri, [ 
                 'form_params' => $params,
             ]);
             if(isset($params['xsmtpapi']))
