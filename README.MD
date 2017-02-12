@@ -37,6 +37,7 @@ A rule engine is employed to post emails to different domains by corresponding s
 	# Push Profile mailhub
 	php artisan vendor:publish
 
+---
 
 ##How to use:
 
@@ -88,3 +89,20 @@ public function exampleTemplate(MailHub $mailhub)
        		->start()
 }
 ```	
+
+---
+
+##Params：
+
+| params  | defaule  | other | description |
+|:------------- |:--------------- |:------------- |:------------- |
+| ```gateway``` | ```''``` | ```swiftmail / sendcloud``` | Specifies the gateway to send |
+| ```async``` | ```false``` | ```true``` | Specify whether third-party mail (SendCloud) needs to use async send, reduce client response time after opening
+| ```env``` | ```false``` | ```true``` | Specifies whether to display APP_ENV at the bottom of the message template. When enabled, add the `{` {{$ env or ''}} `` to the current APP_ENV name in the mail template (to keep the production environment clean, APP_ENV = product will not be shown)
+| ```pretend ``` | ```false``` | ```true``` | Specify whether to intercept the message, so that the message sent to the specified mailbox, mail address in the mailhub configuration file `` `mail_testname`` configuration |
+| ```queue ``` | ```false``` | ```true``` | Specify whether to enable SMTP mail queues. Refer to the Laravel documentation for queue configuration |
+| ```queueTarget ``` | ```mailer``` | ```''``` | Specifies the SMTP mail queue pipe name |
+
+---
+
+##Thx

@@ -30,6 +30,8 @@
 
 	# 推送配置文件mailhub到config
 	php artisan vendor:publish
+
+---
 	
 ##使用方法:
 
@@ -84,4 +86,50 @@ public function exampleTemplate(MailHub $mailhub)
 			->templateInvokeName('mail.register')
 			->start()
 }
+
+/**
+ *	更多的配置
+ */
+public function exampleOptions(MailHub $mailhub)
+{
+    $mailhub->send([
+    
+    				// 设置邮件通道
+    				'gateway' => 'swiftmail',
+    				
+    				// 开启第三方邮件的异步发送
+    				'async' => true,
+    				
+    				// 是否在邮件模板展示APP_ENV
+    				'env' => true,
+
+					// 开启邮件拦截功能
+    				'pretend' => true,
+    				
+    				// 开启SMTP邮件队列
+    				'queue' => true,
+    				
+    				// 指定SMTP邮件队列管道名称
+    				'queueTarget' => 'test',
+    		  ])
+    		  ...
+ 
 ```
+
+---
+
+##参数说明：
+
+| 参数  | 默认值  | 其他可选值 | 说明 |
+|:------------- |:--------------- |:------------- |:------------- |
+| ```gateway``` | ```''``` | ```swiftmail / sendcloud``` | 用于指定通道的强制发送 |
+| ```async``` | ```false``` | ```true``` | 指定第三方邮件(SendCloud)是否需要使用异步发送，开启后减少客户端响应时间
+| ```env``` | ```false``` | ```true``` | 指定是否在邮件模板底部展示APP_ENV，开启后在邮件模板加入```{{ $env or '' }}``展示当前APP_ENV名称(为保持生产环境整洁性，APP_ENV = product时将不给予展示)
+| ```pretend ``` | ```false``` | ```true``` | 指定是否在对发信进行拦截，使邮件发送到指定邮箱, 邮箱地址在mailhub配置文件的```mail_testname```配置 |
+| ```queue ``` | ```false``` | ```true``` | 指定是否开启SMTP邮件队列，队列配置参考Laravel文档 |
+| ```queueTarget ``` | ```mailer``` | ```''``` | 指定SMTP邮件队列管道名称 |
+
+---
+
+##感谢阅读
+
