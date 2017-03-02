@@ -17,13 +17,12 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use MrVokia\MailHub\Traits\MailHubLogTrait;
 use Carbon\Carbon;
 
 class MailHubSend implements MailHubSendInterface
 {
-    use MailHubSendTrait, DispatchesJobs, MailHubLogTrait;
+    use MailHubSendTrait, MailHubLogTrait;
 
     /**
      * Start mail send
@@ -88,8 +87,7 @@ class MailHubSend implements MailHubSendInterface
 
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
-                    $job = (new MailSender('Normal', $params))->onQueue($this->getQueueTarget());
-                    $this->dispatch($job);
+                    dispatch((new MailSender('Normal', $params))->onQueue($this->getQueueTarget()));
                     break;
                 }
                 $this->swiftMailSend($params);
@@ -136,8 +134,7 @@ class MailHubSend implements MailHubSendInterface
 
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
-                    $job = (new MailSender('Template', $params))->onQueue($this->getQueueTarget());
-                    $this->dispatch($job);
+                    dispatch((new MailSender('Template', $params))->onQueue($this->getQueueTarget()));
                     break;
                 }
                 $this->swiftMailTemplateSend($params);
@@ -180,7 +177,7 @@ class MailHubSend implements MailHubSendInterface
 
             // send
             $client = new \GuzzleHttp\Client(['handler' => $handler]);
-            $promise = $client->requestAsync('post', $uri, [ 
+            $promise = $client->requestAsync('post', $uri, [
                 'form_params' => $params,
             ]);
             if(isset($params['xsmtpapi']))
