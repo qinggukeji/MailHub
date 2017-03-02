@@ -3,16 +3,16 @@
 namespace MrVokia\MailHub\Jobs;
 
 use Mail;
-use App\Jobs\Job;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use MrVokia\MailHub\Traits\MailHubLogTrait;
 use Carbon\Carbon;
 
-class MailSender extends Job implements ShouldQueue
+class MailSender implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels, MailHubLogTrait;
+    use InteractsWithQueue, Queueable, SerializesModels, MailHubLogTrait;
 
     /**
      * Send type
@@ -44,7 +44,7 @@ class MailSender extends Job implements ShouldQueue
     public function handle()
     {
         $params = $this->params;
-        
+
         if( $this->type == 'Normal' ) {
 
             // Text send
