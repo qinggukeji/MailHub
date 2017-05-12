@@ -17,7 +17,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise;
-use Carbon\Carbon;
+use Event;
 
 class MailHubSend implements MailHubSendInterface
 {
@@ -167,7 +167,10 @@ class MailHubSend implements MailHubSendInterface
                 'form_params' => $params,
             ]);
 
-            return (string) $res->getBody();
+            $body = (string) $res->getBody();
+            Event::fire('mailhub.api.result', $body);
+
+            return (string) $body;
         } else {
 
             // async send
@@ -186,10 +189,13 @@ class MailHubSend implements MailHubSendInterface
 
             $promise->then(
                 function (ResponseInterface $res) use ($params){
-                    //todo
+                    $body = (string) $res->getBody();
+                    Event::fire('mailhub.api.result', $body);
                 },
                 function (RequestException $e) use ($params){
-                    //todo
+                    $id = isset($params['id']) ? $params['id'] : '';
+                    $status= 'Failed';
+                    Event::fire('mailhub.sent', compact('id', 'status'));
                 }
             );
             $aggregate = Promise\all([$promise]);
@@ -214,6 +220,14 @@ class MailHubSend implements MailHubSendInterface
                     ->from(env('MAIL_USERNAME'), $params['fromName'])
                     ->subject($params['subject']);
         });
+
+        $id = isset($params['id']) ? $params['id'] : '';
+        if(count(Mail::failures()) > 0){
+            $status= 'Failed';
+        } else {
+            $status= 'Succeeded';
+        }
+        Event::fire('mailhub.sent', compact('id', 'status'));
     }
 
     /**
@@ -284,5 +298,13 @@ class MailHubSend implements MailHubSendInterface
                     ->from(env('MAIL_USERNAME'), $params['fromName'])
                     ->subject($params['subject']);
         });
+
+        $id = isset($params['id']) ? $params['id'] : '';
+        if(count(Mail::failures()) > 0){
+            $status= 'Failed';
+        } else {
+            $status= 'Succeeded';
+        }
+        Event::fire('mailhub.sent', compact('id', 'status'));
     }
 }
