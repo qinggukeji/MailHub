@@ -7,12 +7,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use MrVokia\MailHub\Traits\MailHubLogTrait;
 use Carbon\Carbon;
 
 class MailSender implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels, MailHubLogTrait;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Send type
@@ -69,8 +68,6 @@ class MailSender implements ShouldQueue
             });
         }
 
-        $fileDir = $this->getSwiftmailLogDir();
-        $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($params, JSON_UNESCAPED_UNICODE).chr(10), $fileDir);
     }
 
 
@@ -80,7 +77,6 @@ class MailSender implements ShouldQueue
      */
     public function failed()
     {
-        $fileDir = $this->getSwiftmailFailLogDir();
-        $this->logInfo('['.Carbon::now($this->local)->format('Y-m-d H:i:s').']'.json_encode($this->params, JSON_UNESCAPED_UNICODE).chr(10), $fileDir);
+        //todo
     }
 }
