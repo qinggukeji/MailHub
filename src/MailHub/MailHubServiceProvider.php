@@ -36,9 +36,9 @@ class MailHubServiceProvider extends ServiceProvider
     {
         $this->registerMailHub();
 
-        if( ! strstr(app()->version(), 'Lumen') ) {
-            include __DIR__ . '/../routes.php';
-        }
+        // if( ! strstr(app()->version(), 'Lumen') ) {
+        //     include __DIR__ . '/../routes.php';
+        // }
     }
 
     /**
