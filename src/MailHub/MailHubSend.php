@@ -161,6 +161,8 @@ class MailHubSend implements MailHubSendInterface
         $async = $this->getAsync();
         if (!$async) {
 
+            $id = isset($params['id']) ? $params['id'] : '';
+
             // send
             $client = new \GuzzleHttp\Client();
 
@@ -170,7 +172,7 @@ class MailHubSend implements MailHubSendInterface
             ]);
 
             $body = (string) $res->getBody();
-            Event::fire('mailhub.api.result', $body);
+            Event::fire('mailhub.api.result', compact('id', 'body'));
 
             return (string) $body;
         } else {
@@ -191,8 +193,9 @@ class MailHubSend implements MailHubSendInterface
 
             $promise->then(
                 function (ResponseInterface $res) use ($params){
+                    $id = isset($params['id']) ? $params['id'] : '';
                     $body = (string) $res->getBody();
-                    Event::fire('mailhub.api.result', $body);
+                    Event::fire('mailhub.api.result', compact('id', 'body'));
                 },
                 function (RequestException $e) use ($params){
                     $id = isset($params['id']) ? $params['id'] : '';
