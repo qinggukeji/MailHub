@@ -37,6 +37,12 @@ trait MailHubTrait
     private $fromName;
 
     /**
+     * Send mail message
+     * @var array
+     */
+    private $message;
+
+    /**
      * Send mail objects
      * @var array
      */
@@ -323,6 +329,14 @@ trait MailHubTrait
             $fromName = config('mailhub.sender_name');
         }
         $this->fromName = $fromName;
+    }
+
+    /**
+     * Set mail id
+     */
+    public function setMessage($message = '')
+    {
+        $this->message = $message;
     }
 
     /**

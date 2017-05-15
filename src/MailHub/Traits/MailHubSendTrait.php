@@ -55,6 +55,19 @@ trait MailHubSendTrait
     }
 
     /**
+     * Setting mail message id
+     * @param string|array $mails mail address
+     */
+    public function id($message = '')
+    {
+        if (!empty($message)) {
+            $this->setMessage($message);
+        }
+
+        return $this;
+    }
+
+    /**
      * Setting send regular mail address
      * @param string|array $mails mail address
      */
