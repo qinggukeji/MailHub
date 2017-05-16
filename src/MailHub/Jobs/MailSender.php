@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Carbon\Carbon;
+use Event;
 
 class MailSender implements ShouldQueue
 {
@@ -68,6 +69,10 @@ class MailSender implements ShouldQueue
             });
         }
 
+        $id = $params['id'];
+        $status = 'Succeeded';
+        Event::fire('mailhub.job.sent', compact('id', 'status'));
+
     }
 
 
@@ -77,6 +82,8 @@ class MailSender implements ShouldQueue
      */
     public function failed()
     {
-        //todo
+        $id = $this->params['id'];
+        $status = 'Failed';
+        Event::fire('mailhub.job.sent', compact('id', 'status'));
     }
 }
