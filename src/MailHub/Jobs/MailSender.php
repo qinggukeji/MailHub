@@ -52,8 +52,17 @@ class MailSender implements ShouldQueue
                 if( $params['attach'] ) {
                     $message->attach($params['attach']);
                 }
-                $message->to($params['to'])
-                        ->from(env('MAIL_USERNAME'), $params['fromName'])
+                $message->to($params['to']);
+
+                if( ! empty($params['cc']) ) {
+                    $message->cc($params['cc']);
+                }
+
+                if( ! empty($params['bcc']) ) {
+                    $message->cc($params['cc']);
+                }
+
+                $message->from(env('MAIL_USERNAME'), $params['fromName'])
                         ->subject($params['subject']);
             });
         } elseif ( $this->type == 'Template' ) {
@@ -63,8 +72,17 @@ class MailSender implements ShouldQueue
                 if( $params['attach'] ) {
                     $message->attach($params['attach']);
                 }
-                $message->to($params['to'])
-                        ->from(env('MAIL_USERNAME'), $params['fromName'])
+                $message->to($params['to']);
+
+                if( ! empty($params['cc']) ) {
+                    $message->cc($params['cc']);
+                }
+
+                if( ! empty($params['bcc']) ) {
+                    $message->cc($params['cc']);
+                }
+
+                $message->from(env('MAIL_USERNAME'), $params['fromName'])
                         ->subject($params['subject']);
             });
         }

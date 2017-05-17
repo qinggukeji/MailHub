@@ -89,7 +89,7 @@ trait MailHubSendTrait
     public function cc($mails = '')
     {
         if (empty($mails)) {
-            return false;
+            return $this;
         }
 
         $this->fifter($mails, 'CC');
@@ -104,7 +104,7 @@ trait MailHubSendTrait
     public function bcc($mails = '')
     {
         if (empty($mails)) {
-            return false;
+            return $this;
         }
 
         $this->fifter($mails, 'BCC');
