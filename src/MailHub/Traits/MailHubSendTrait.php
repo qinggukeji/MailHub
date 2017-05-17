@@ -250,12 +250,12 @@ trait MailHubSendTrait
         // Check fifter
         if (empty($fifter)) {
             $fifterMail[$this->getGateways()] = $mails;
-            return $this->setTo($fifterMail);
+            return $this->{'set' . $type}($fifterMail);
         }
 
         if (!empty($this->forcibly)) {
             $fifterMail[$this->forcibly] = $mails;
-            return $this->setTo($fifterMail);
+            return $this->{'set' . $type}($fifterMail);
         }
 
         foreach ($mails as $k => $mail) {
