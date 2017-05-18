@@ -173,7 +173,8 @@ trait MailHubSendTrait
                     return $this->xsmtpapi['swiftmail'] = $data;
                 default:
                     $datas     = [];
-                    $toAddress = $this->to[$val];
+                    $this->setMailList();
+                    $toAddress = $this->mailList[$val]['to'];
                     foreach ($data as $k => $field) {
                         if (is_array($field)) {
                             $newField = [];
@@ -189,7 +190,7 @@ trait MailHubSendTrait
                             $datas['%' . $k . '%'] = $newField;
                         }
                     }
-                    return $this->xsmtpapi[$val] = json_encode(['to' => array_values($this->to[$val]), 'sub' => $datas]);
+                    return $this->xsmtpapi[$val] = json_encode(['to' => array_values($toAddress), 'sub' => $datas]);
             }
         }, $this->getAllGateways());
 

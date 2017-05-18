@@ -37,6 +37,12 @@ trait MailHubTrait
     private $fromName;
 
     /**
+     * Send mail list
+     * @var array
+     */
+    private $mailList;
+
+    /**
      * Send mail message
      * @var array
      */
@@ -289,6 +295,87 @@ trait MailHubTrait
     public function getTemplateTag()
     {
         return config('mailhub.template_tag');
+    }
+
+    /**
+     * Get send mail list
+     * @return string
+     */
+    public function setMailList()
+    {
+        $mailList = [];
+
+        foreach ($this->getAllGateways() as $gateway) {
+
+            $mailList[$gateway] = [];
+
+            if( ! is_null($this->to) && isset($this->to[$gateway]) && $this->to[$gateway] !== [] ) {
+                $mailList[$gateway]['to'] = $this->to[$gateway];
+            }
+
+            if( ! is_null($this->cc) && isset($this->cc[$gateway]) && $this->cc[$gateway] !== [] ) {
+                $mailList[$gateway]['cc'] = $this->cc[$gateway];
+            }
+
+            if( ! is_null($this->bcc) && isset($this->bcc[$gateway]) && $this->bcc[$gateway] !== [] ) {
+                $mailList[$gateway]['bcc'] = $this->bcc[$gateway];
+            }
+        }
+
+        if( $mailList['sendcloud'] == [] ) {
+
+            unset($mailList['sendcloud']);
+
+        } elseif( $mailList['swiftmail'] == [] ) {
+
+            unset($mailList['swiftmail']);
+
+            $sendcloud = mailList['sendcloud'];
+
+            foreach (['cc', 'bcc'] as $method) {
+                if( isset($sendcloud[$method]) && $sendcloud[$method] !== [] ) {
+                    $mailList['sendcloud']['to'] = array_merge($sendcloud['to'], $sendcloud[$method]);
+                    unset($mailList['sendcloud'][$method]);
+                }
+            }
+
+        } else {
+
+            if( ! isset($mailList['sendcloud']['to']) ) {
+
+                $sendcloud = $mailList['sendcloud'];
+                $sendcloud['to'] = [];
+
+                foreach (['cc', 'bcc'] as $method) {
+                    if( isset($sendcloud[$method]) && $sendcloud[$method] !== [] ) {
+                        if( $sendcloud['to'] == [] ) {
+                            $sendcloud['to'] = $sendcloud[$method];
+                        } else {
+                            $sendcloud['to'] = array_merge($sendcloud['to'], $sendcloud[$method]);
+                        }
+                        unset($sendcloud[$method]);
+                    }
+                }
+
+                $mailList['sendcloud'] = $sendcloud;
+            } elseif( ! isset($mailList['swiftmail']['to']) ) {
+
+                $swiftmail = $mailList['swiftmail'];
+                $swiftmail['to'] = [];
+
+                foreach (['cc', 'bcc'] as $method) {
+                    if( isset($swiftmail[$method]) && $swiftmail[$method] !== [] ) {
+                        $swiftmail['to'] = [$swiftmail[$method]{0}];
+                        unset($swiftmail[$method]{0});
+                    }
+                }
+
+                $mailList['swiftmail'] = $swiftmail;
+            }
+
+        }
+
+        $this->mailList = $mailList;
     }
 
     /**

@@ -79,11 +79,16 @@ class MailHubSend implements MailHubSendInterface
             'html'     => $this->html,
         ];
 
+        if( ! $this->mailList ) {
+            $this->setMailList();
+        }
+        $mails = $this->mailList;
+
         // Set the gateway corresponding method
         foreach ($this->to as $gateway => $mails) {
-            $params['to']  = isset($this->to[$gateway]) ? $this->to[$gateway] : null;
-            $params['cc']  = isset($this->cc[$gateway]) ? $this->cc[$gateway] : null;
-            $params['bcc'] = isset($this->bcc[$gateway]) ? $this->bcc[$gateway] : null;
+            $params['to']   = isset($mails[$gateway]['to']) ? $mails[$gateway]['to'] : null;
+            $params['cc']   = isset($mails[$gateway]['cc']) ? $mails[$gateway]['cc'] : null;
+            $params['bcc']  = isset($mails[$gateway]['bcc']) ? $mails[$gateway]['bcc'] : null;
 
             if ('swiftmail' == $gateway) {
                 if( $this->getQueue() ) {
@@ -125,11 +130,16 @@ class MailHubSend implements MailHubSendInterface
             'templateInvokeName' => '',
         ];
 
+        if( ! $this->mailList ) {
+            $this->setMailList();
+        }
+        $mails = $this->mailList;
+
         // Set the gateway corresponding method
-        foreach ($this->to as $gateway => $mails) {
-            $params['to']                 = isset($this->to[$gateway]) ? $this->to[$gateway] : null;
-            $params['cc']                 = isset($this->cc[$gateway]) ? $this->cc[$gateway] : null;
-            $params['bcc']                = isset($this->bcc[$gateway]) ? $this->bcc[$gateway] : null;
+        foreach ($mails as $gateway => $data) {
+            $params['to']                 = isset($mails[$gateway]['to']) ? $mails[$gateway]['to'] : null;
+            $params['cc']                 = isset($mails[$gateway]['cc']) ? $mails[$gateway]['cc'] : null;
+            $params['bcc']                = isset($mails[$gateway]['bcc']) ? $mails[$gateway]['bcc'] : null;
             $params['xsmtpapi']           = $this->xsmtpapi[$gateway];
             $params['templateInvokeName'] = $this->templateInvokeName[$gateway];
 
