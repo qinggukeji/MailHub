@@ -85,7 +85,7 @@ class MailHubSend implements MailHubSendInterface
         $mails = $this->mailList;
 
         // Set the gateway corresponding method
-        foreach ($this->to as $gateway => $mails) {
+        foreach ($mails as $gateway => $mails) {
             $params['to']   = isset($mails[$gateway]['to']) ? $mails[$gateway]['to'] : null;
             $params['cc']   = isset($mails[$gateway]['cc']) ? $mails[$gateway]['cc'] : null;
             $params['bcc']  = isset($mails[$gateway]['bcc']) ? $mails[$gateway]['bcc'] : null;

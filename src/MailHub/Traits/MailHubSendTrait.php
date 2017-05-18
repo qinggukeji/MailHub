@@ -172,8 +172,11 @@ trait MailHubSendTrait
                     }
                     return $this->xsmtpapi['swiftmail'] = $data;
                 default:
-                    $datas     = [];
+                    $datas = [];
                     $this->setMailList();
+                    if( ! isset($this->mailList[$val]) ) {
+                        continue;
+                    }
                     $toAddress = $this->mailList[$val]['to'];
                     foreach ($data as $k => $field) {
                         if (is_array($field)) {
