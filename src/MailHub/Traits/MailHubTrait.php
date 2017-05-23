@@ -366,7 +366,10 @@ trait MailHubTrait
                 foreach (['cc', 'bcc'] as $method) {
                     if( isset($swiftmail[$method]) && $swiftmail[$method] !== [] && $swiftmail['to'] == [] ) {
                         $swiftmail['to'] = [$swiftmail[$method]{0}];
-                        unset($swiftmail[$method]);
+                        unset($swiftmail[$method]{0});
+                        if( $swiftmail[$method] == [] ) {
+                            unset($swiftmail[$method]);
+                        }
                     }
                 }
 
