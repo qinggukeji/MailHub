@@ -364,13 +364,22 @@ trait MailHubTrait
                 $swiftmail['to'] = [];
 
                 foreach (['cc', 'bcc'] as $method) {
-                    if( isset($swiftmail[$method]) && $swiftmail[$method] !== [] ) {
+                    if( isset($swiftmail[$method]) && $swiftmail[$method] !== [] && $swiftmail['to'] == [] ) {
                         $swiftmail['to'] = [$swiftmail[$method]{0}];
-                        unset($swiftmail[$method]{0});
+                        unset($swiftmail[$method]);
                     }
                 }
 
                 $mailList['swiftmail'] = $swiftmail;
+
+                $sendcloud = $mailList['sendcloud'];
+
+                foreach (['cc', 'bcc'] as $method) {
+                    if( isset($sendcloud[$method]) && $sendcloud[$method] !== [] ) {
+                        $mailList['sendcloud']['to'] = array_merge($sendcloud['to'], $sendcloud[$method]);
+                        unset($mailList['sendcloud'][$method]);
+                    }
+                }
             }
 
         }
