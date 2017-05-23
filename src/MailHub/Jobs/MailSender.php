@@ -59,7 +59,7 @@ class MailSender implements ShouldQueue
                 }
 
                 if( ! empty($params['bcc']) ) {
-                    $message->cc($params['cc']);
+                    $message->bcc($params['bcc']);
                 }
 
                 $message->from(env('MAIL_USERNAME'), $params['fromName'])
@@ -79,7 +79,7 @@ class MailSender implements ShouldQueue
                 }
 
                 if( ! empty($params['bcc']) ) {
-                    $message->cc($params['cc']);
+                    $message->bcc($params['bcc']);
                 }
 
                 $message->from(env('MAIL_USERNAME'), $params['fromName'])
