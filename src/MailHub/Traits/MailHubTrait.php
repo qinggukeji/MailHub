@@ -322,69 +322,16 @@ trait MailHubTrait
             }
         }
 
-        if( $mailList['sendcloud'] == [] ) {
+        if( $this->forcibly == 'sendcloud' ) {
 
-            unset($mailList['sendcloud']);
-
-        } elseif( $mailList['swiftmail'] == [] ) {
-
-            unset($mailList['swiftmail']);
-
-            $sendcloud = mailList['sendcloud'];
+            $sendcloud = $mailList['sendcloud'];
 
             foreach (['cc', 'bcc'] as $method) {
                 if( isset($sendcloud[$method]) && $sendcloud[$method] !== [] ) {
-                    $mailList['sendcloud']['to'] = array_merge($sendcloud['to'], $sendcloud[$method]);
+                    $mailList['sendcloud']['to'] = array_merge($mailList['sendcloud']['to'], $sendcloud[$method]);
                     unset($mailList['sendcloud'][$method]);
                 }
             }
-
-        } else {
-
-            if( ! isset($mailList['sendcloud']['to']) ) {
-
-                $sendcloud = $mailList['sendcloud'];
-                $sendcloud['to'] = [];
-
-                foreach (['cc', 'bcc'] as $method) {
-                    if( isset($sendcloud[$method]) && $sendcloud[$method] !== [] ) {
-                        if( $sendcloud['to'] == [] ) {
-                            $sendcloud['to'] = $sendcloud[$method];
-                        } else {
-                            $sendcloud['to'] = array_merge($sendcloud['to'], $sendcloud[$method]);
-                        }
-                        unset($sendcloud[$method]);
-                    }
-                }
-
-                $mailList['sendcloud'] = $sendcloud;
-            } elseif( ! isset($mailList['swiftmail']['to']) ) {
-
-                $swiftmail = $mailList['swiftmail'];
-                $swiftmail['to'] = [];
-
-                foreach (['cc', 'bcc'] as $method) {
-                    if( isset($swiftmail[$method]) && $swiftmail[$method] !== [] && $swiftmail['to'] == [] ) {
-                        $swiftmail['to'] = [$swiftmail[$method]{0}];
-                        unset($swiftmail[$method]{0});
-                        if( $swiftmail[$method] == [] ) {
-                            unset($swiftmail[$method]);
-                        }
-                    }
-                }
-
-                $mailList['swiftmail'] = $swiftmail;
-
-                $sendcloud = $mailList['sendcloud'];
-
-                foreach (['cc', 'bcc'] as $method) {
-                    if( isset($sendcloud[$method]) && $sendcloud[$method] !== [] ) {
-                        $mailList['sendcloud']['to'] = array_merge($sendcloud['to'], $sendcloud[$method]);
-                        unset($mailList['sendcloud'][$method]);
-                    }
-                }
-            }
-
         }
 
         $this->mailList = $mailList;
